@@ -19,6 +19,8 @@
       --danger: #FF6363;
       --pending: #FFA600;
       --radius: 16px;
+      --subtask-bg: #f3fafd;
+      --subtask-bg2: #f7f7fa;
     }
     body {
       background: var(--bg);
@@ -81,16 +83,24 @@
       align-items: center;
       gap: 0.6rem;
     }
-    section h2 .dot {
-      width: 9px;
-      height: 9px;
-      background: var(--primary);
-      border-radius: 50%;
+    /* Section icons */
+    .section-svg {
+      width: 24px;
+      height: 24px;
+      vertical-align: middle;
       display: inline-block;
     }
-    section h2 .icon {
-      font-size: 1.2em;
-      color: var(--primary);
+    .section-svg-alarm {
+      stroke: #36b9cc;
+      fill: none;
+    }
+    .section-svg-check {
+      stroke: #43E97B;
+      fill: none;
+    }
+    .section-svg-tracker {
+      stroke: #8f5eff;
+      fill: none;
     }
     .list {
       margin: 0; padding: 0;
@@ -108,6 +118,9 @@
       border: 1px solid var(--border);
       padding: 0.5rem 0.7rem;
       transition: box-shadow .18s;
+      position: relative;
+      width: 100%;
+      box-sizing: border-box;
     }
     .jadwal-row input[type="text"] {
       border: none;
@@ -116,22 +129,99 @@
       flex: 1;
       color: var(--text);
       font-family: inherit;
+      padding: 8px 0;
+      transition: background .15s;
+      min-width: 0;
     }
     .jadwal-row input[type="text"]:focus {
       outline: 1.5px solid var(--primary);
       background: #f3f9ff;
     }
-    .jadwal-row .jam {
-      font-weight: bold;
+    /* Custom time picker */
+    .timepicker-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .timepicker {
+      border: 1.5px solid var(--border);
+      background: #f3fafd;
+      border-radius: 7px;
       color: var(--primary);
-      min-width: 46px;
+      padding: 7px 7px 7px 10px;
+      font-size: 1.08rem;
+      font-family: inherit;
+      min-width: 82px;
+      outline: none;
+      transition: border .18s, background .18s;
+      appearance: none;
+      box-shadow: none;
+      cursor: pointer;
+    }
+    .timepicker:focus {
+      border: 1.5px solid var(--primary);
+      background: #e9faff;
+    }
+    .timepicker::-webkit-calendar-picker-indicator {
+      filter: invert(45%) sepia(66%) saturate(382%) hue-rotate(141deg) brightness(95%) contrast(97%);
+      cursor: pointer;
+    }
+    /* Alarm Icon */
+    .alarm-icon {
+      width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 8px;
+      cursor: pointer;
+      transition: color .2s;
+    }
+    .alarm-off svg { stroke: #bbb; fill: none;}
+    .alarm-on svg { stroke: #43E97B; fill: none;}
+    .alarm-ringing svg { stroke: #FF6363; fill: none; }
+    .alarm-off svg .slash { stroke: #bbb; }
+    .alarm-on svg, .alarm-ringing svg, .alarm-off svg { vertical-align: middle; }
+    .alarm-ringing { animation: shake 0.25s 5; }
+    @keyframes shake {
+      0% { transform: translateX(0);}
+      20% { transform: translateX(-3px);}
+      40% { transform: translateX(3px);}
+      60% { transform: translateX(-2px);}
+      80% { transform: translateX(2px);}
+      100% { transform: translateX(0);}
+    }
+    /* Sub-tugas styling */
+    .sub-task-row {
+      width: 85%;
+      margin: 0.3rem auto 0.3rem auto;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      padding: 0.7rem 1.1rem;
+      gap: 0.7rem;
+      box-sizing: border-box;
+      box-shadow: 0 1px 5px #0001;
+      transition: background .2s;
+      min-width: 0;
+      position: relative;
+    }
+    .sub-task-row input[type="text"] {
+      flex: 1;
+      background: transparent;
+      border: none;
       font-size: 1.07rem;
-      letter-spacing: .5px;
+      color: var(--text);
+      font-family: inherit;
+      padding: 8px 0;
+      transition: background .15s;
+      min-width: 0;
     }
-    .jadwal-row .actions {
-      display: flex; gap: 0.2rem;
+    .sub-task-row input[type="text"]:focus {
+      outline: 1.5px solid var(--primary);
+      background: #f3f9ff;
     }
-    .jadwal-row .btn {
+    .sub-task-row .btn {
       background: none;
       border: none;
       font-size: 1.1rem;
@@ -139,9 +229,11 @@
       color: var(--muted);
       transition: color .14s;
       margin-left: 3px;
+      padding: 0;
+      line-height: 1;
     }
-    .jadwal-row .btn:hover { color: var(--danger);}
-    .jadwal-row .btn.add:hover { color: var(--primary);}
+    .sub-task-row .btn svg { vertical-align: middle;}
+    .sub-task-row .btn:hover { color: var(--danger);}
     .btn-add-row {
       margin: 0.5rem 0 0 0;
       background: var(--primary);
@@ -154,9 +246,14 @@
       cursor: pointer;
       transition: background .18s;
       display: block;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      justify-content: center;
     }
+    .btn-add-row svg { vertical-align: middle;}
     .btn-add-row:hover { background: #2aaebc;}
-    /* Daftar Tugas */
+    /* Task & Tracker tetap... */
     .task-row {
       display: flex;
       align-items: center;
@@ -204,7 +301,10 @@
       color: var(--muted);
       transition: color .14s;
       margin-left: 3px;
+      padding: 0;
+      line-height: 1;
     }
+    .task-row .btn svg { vertical-align: middle;}
     .task-row .btn:hover { color: var(--danger);}
     .task-row .btn.add:hover { color: var(--primary);}
     .btn-add-task {
@@ -219,122 +319,37 @@
       cursor: pointer;
       transition: background .18s;
       display: block;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      justify-content: center;
     }
+    .btn-add-task svg { vertical-align: middle;}
     .btn-add-task:hover { background: #2aaebc;}
-    /* Tracker */
-    .tracker-header {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      margin-bottom: 1.1rem;
-    }
-    .tracker-row {
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 1px 6px #0001;
-      border: 1px solid var(--border);
-      margin-bottom: 1.1rem;
-      padding: 0.7rem 0.7rem 1.1rem 0.7rem;
-      position: relative;
-    }
-    .tracker-row .header {
-      display: flex;
-      align-items: center;
-      gap: 0.7rem;
-      margin-bottom: 0.7rem;
-    }
-    .tracker-row input[type="text"] {
-      border: none;
-      background: transparent;
-      font-size: 1.08rem;
-      font-weight: 500;
-      color: var(--primary);
-      flex: 1;
-      min-width: 55px;
-      font-family: inherit;
-    }
-    .tracker-row input[type="text"]:focus {
-      outline: 1.5px solid var(--primary);
-      background: #f3f9ff;
-    }
-    .tracker-row input[type="number"] {
-      width: 60px;
-      border: 1.2px solid var(--border);
-      border-radius: 7px;
-      padding: 4px 5px;
-      font-size: 1.03rem;
-      margin-left: 8px;
-      text-align: right;
-      font-family: inherit;
-    }
-    .tracker-row .btn {
-      background: none;
-      border: none;
-      font-size: 1.1rem;
-      cursor: pointer;
-      color: var(--muted);
-      transition: color .14s;
-      margin-left: 3px;
-    }
+    /* Tracker tetap... */
+    .tracker-header { display: flex; align-items: center; gap: 0.4rem; margin-bottom: 1.1rem;}
+    .tracker-row { background: #fff; border-radius: 10px; box-shadow: 0 1px 6px #0001; border: 1px solid var(--border); margin-bottom: 1.1rem; padding: 0.7rem 0.7rem 1.1rem 0.7rem; position: relative;}
+    .tracker-row .header { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.7rem;}
+    .tracker-row input[type="text"] { border: none; background: transparent; font-size: 1.08rem; font-weight: 500; color: var(--primary); flex: 1; min-width: 55px; font-family: inherit;}
+    .tracker-row input[type="text"]:focus { outline: 1.5px solid var(--primary); background: #f3f9ff;}
+    .tracker-row input[type="number"] { width: 60px; border: 1.2px solid var(--border); border-radius: 7px; padding: 4px 5px; font-size: 1.03rem; margin-left: 8px; text-align: right; font-family: inherit;}
+    .tracker-row .btn { background: none; border: none; font-size: 1.1rem; cursor: pointer; color: var(--muted); transition: color .14s; margin-left: 3px; padding: 0; line-height: 1;}
+    .tracker-row .btn svg { vertical-align: middle;}
     .tracker-row .btn:hover { color: var(--danger);}
-    .tracker-controls {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      margin-bottom: 0.55rem;
-    }
-    .tracker-controls button {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 1.1rem;
-      padding: 0.25rem 0.8rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background .15s;
-    }
+    .tracker-controls { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.55rem;}
+    .tracker-controls button { background: var(--primary); color: #fff; border: none; border-radius: 6px; font-size: 1.1rem; padding: 0.25rem 0.8rem; font-weight: 500; cursor: pointer; transition: background .15s;}
     .tracker-controls button:hover { background: #2aaebc;}
-    .progress-bar {
-      width: 100%;
-      height: 15px;
-      background: #e7eaf3;
-      border-radius: 8px;
-      margin-top: 8px;
-      position: relative;
-      overflow: hidden;
-    }
-    .progress-bar-inner {
-      height: 100%;
-      background: linear-gradient(90deg, var(--primary) 60%, var(--accent));
-      border-radius: 8px;
-      transition: width .35s cubic-bezier(.72,.3,.29,1.18);
-      width: 0%;
-    }
-    .progress-bar-label {
-      font-size: 0.94rem;
-      margin-top: 5px;
-      color: var(--muted);
-      text-align: right;
-    }
-    .btn-add-tracker {
-      margin: 0.5rem 0 0 0;
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 0.55rem 1.2rem;
-      font-size: 1.05rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background .18s;
-      display: block;
-    }
+    .progress-bar { width: 100%; height: 15px; background: #e7eaf3; border-radius: 8px; margin-top: 8px; position: relative; overflow: hidden;}
+    .progress-bar-inner { height: 100%; background: linear-gradient(90deg, var(--primary) 60%, var(--accent)); border-radius: 8px; transition: width .35s cubic-bezier(.72,.3,.29,1.18); width: 0%;}
+    .progress-bar-label { font-size: 0.94rem; margin-top: 5px; color: var(--muted); text-align: right;}
+    .btn-add-tracker { margin: 0.5rem 0 0 0; background: var(--primary); color: #fff; border: none; border-radius: 8px; padding: 0.55rem 1.2rem; font-size: 1.05rem; font-weight: 600; cursor: pointer; transition: background .18s; display: block;}
+    .btn-add-tracker svg { vertical-align: middle;}
     .btn-add-tracker:hover { background: #2aaebc;}
     @media (max-width: 650px) {
       .container { max-width: 99vw;}
       .stat { padding: 0.8rem 0.7rem;}
       section { padding: 0.7rem 0.3rem 1.2rem 0.3rem;}
+      .sub-task-row {padding: 0.55rem 0.4rem;}
     }
   </style>
 </head>
@@ -359,70 +374,243 @@
     <section>
       <h2>
         <span class="dot"></span>
-        <span class="icon">⏰</span>
+        <span class="section-svg section-svg-alarm">
+          <!-- SVG Alarm Clock -->
+          <svg width="24" height="24" fill="none" stroke-width="2" stroke="#36b9cc" viewBox="0 0 24 24">
+            <circle cx="12" cy="13" r="7"/>
+            <path d="M12 13V9M12 13L15 15"/>
+            <path d="M5 3L2 6"/>
+            <path d="M19 3l3 3"/>
+          </svg>
+        </span>
         Jadwal Harian
       </h2>
       <div id="jadwalList"></div>
-      <button class="btn-add-row" onclick="addJadwal()">+ Tambah Jadwal</button>
+      <button class="btn-add-row" onclick="addJadwalUI()">
+        <span>
+        <!-- Plus SVG -->
+        <svg width="20" height="20" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </span>Tambah Jadwal
+      </button>
     </section>
     <!-- Daftar Tugas -->
     <section>
       <h2>
         <span class="dot"></span>
-        <span class="icon">✔️</span>
+        <span class="section-svg section-svg-check">
+          <!-- SVG Checklist -->
+          <svg width="24" height="24" fill="none" stroke-width="2" stroke="#43E97B" viewBox="0 0 24 24">
+            <rect x="3" y="3" width="18" height="18" rx="4" stroke="#43E97B"/>
+            <path d="M8 12.5l3 3 5-5" stroke="#43E97B" stroke-width="2" fill="none"/>
+          </svg>
+        </span>
         Daftar Tugas
       </h2>
       <div id="taskList"></div>
-      <button class="btn-add-task" onclick="addTask()">+ Tambah Tugas</button>
+      <button class="btn-add-task" onclick="addTask()">
+        <svg width="20" height="20" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Tambah Tugas
+      </button>
     </section>
     <!-- Tracker -->
     <section>
       <h2>
         <span class="dot"></span>
-        <span class="icon">📈</span>
+        <span class="section-svg section-svg-tracker">
+          <!-- SVG Bar Chart -->
+          <svg width="24" height="24" fill="none" stroke-width="2" stroke="#8f5eff" viewBox="0 0 24 24">
+            <rect x="4" y="17" width="3" height="3" fill="#8f5eff" stroke="#8f5eff"/>
+            <rect x="10.5" y="13" width="3" height="7" fill="#8f5eff" stroke="#8f5eff"/>
+            <rect x="17" y="9" width="3" height="11" fill="#8f5eff" stroke="#8f5eff"/>
+          </svg>
+        </span>
         Tracker Harian
       </h2>
       <div id="trackerList"></div>
-      <button class="btn-add-tracker" onclick="addTracker()">+ Tambah Tracker</button>
+      <button class="btn-add-tracker" onclick="addTracker()">
+        <svg width="20" height="20" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Tambah Tracker
+      </button>
     </section>
   </div>
   <script>
     // --- Jadwal Harian ---
-    let jadwals = JSON.parse(localStorage.getItem('jadwals') || '[]');
+    let jadwals = JSON.parse(localStorage.getItem('jadwals_svg') || '[]');
+
     function saveJadwals() {
-      localStorage.setItem('jadwals', JSON.stringify(jadwals));
+      localStorage.setItem('jadwals_svg', JSON.stringify(jadwals));
     }
-    function addJadwal(jam = '', text = '') {
-      jadwals.push({ jam: jam || defJam(jadwals.length), text });
-      saveJadwals(); renderJadwal();
+
+    // Alarm icon SVG
+    function alarmIcon(isActive, isRinging = false) {
+      if (isRinging) return `<span class="alarm-icon alarm-ringing" title="Alarm berbunyi!">${alarmSVG('ringing')}</span>`;
+      if (isActive) return `<span class="alarm-icon alarm-on" title="Alarm aktif">${alarmSVG('on')}</span>`;
+      return `<span class="alarm-icon alarm-off" title="Alarm nonaktif">${alarmSVG('off')}</span>`;
     }
-    function delJadwal(idx) {
-      jadwals.splice(idx, 1);
-      saveJadwals(); renderJadwal();
+    function alarmSVG(state) {
+      if (state === 'on') return `
+      <svg width="22" height="22" stroke="#43E97B" fill="none" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="12" cy="13" r="7"/>
+        <path d="M12 13V9M12 13L15 15"/>
+        <path d="M5 3L2 6"/>
+        <path d="M19 3l3 3"/>
+      </svg>`;
+      if (state === 'ringing') return `
+      <svg width="22" height="22" stroke="#FF6363" fill="none" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="12" cy="13" r="7"/>
+        <path d="M12 13V9M12 13L15 15"/>
+        <path d="M5 3L2 6"/>
+        <path d="M19 3l3 3"/>
+        <g><path d="M2 21L22 21" stroke="#FF6363" stroke-width="1.5"/></g>
+      </svg>`;
+      // off: bell + garis silang
+      return `
+      <svg width="22" height="22" stroke="#bbb" fill="none" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="12" cy="13" r="7"/>
+        <path d="M12 13V9M12 13L15 15"/>
+        <path d="M5 3L2 6"/>
+        <path d="M19 3l3 3"/>
+        <g class="slash"><line x1="5" y1="20" x2="19" y2="6" stroke="#bbb" stroke-width="2"/></g>
+      </svg>`;
     }
-    function defJam(idx) {
-      const def = ["06:00","09:00","12:00","15:00","18:00"];
-      return def[idx] || "";
+
+    // Plus SVG
+    function svgPlus(color = "#36b9cc") {
+      return `<svg width="20" height="20" fill="none" stroke="${color}" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`;
     }
+
+    // Trash SVG
+    function svgTrash(color="#bbb") {
+      return `<svg width="20" height="20" fill="none" stroke="${color}" stroke-width="2" viewBox="0 0 24 24">
+        <rect x="5" y="6" width="14" height="13" rx="2"/>
+        <path d="M3 6h18"/>
+        <path d="M8 10v6"/>
+        <path d="M12 10v6"/>
+        <path d="M16 10v6"/>
+        <path d="M10 3h4"/>
+      </svg>`;
+    }
+
+    // Jadwal row: add sub-jadwal, trash
+    function addSubJadwal(idx) {
+      jadwals[idx].subs = jadwals[idx].subs || [];
+      jadwals[idx].subs.push({ text: "" });
+      saveJadwals();
+      renderJadwal();
+      setTimeout(() => {
+        const input = document.querySelector(`.sub-task-row[data-parent="${idx}"] input[type="text"]:last-child`);
+        if (input) input.focus();
+      }, 50);
+    }
+    function delSubJadwal(idx, sidx) {
+      jadwals[idx].subs.splice(sidx, 1);
+      saveJadwals();
+      renderJadwal();
+    }
+    function toggleAlarm(idx) {
+      jadwals[idx].alarm = !jadwals[idx].alarm;
+      saveJadwals();
+      renderJadwal();
+    }
+
+    // Time Picker Input
+    function timePicker(val, idx) {
+      return `<div class="timepicker-wrap">
+        <input type="time" class="timepicker" value="${val ? val : '07:00'}" onchange="updateJam(this,${idx})" />
+      </div>`;
+    }
+    function updateJam(el, idx) {
+      jadwals[idx].jam = el.value;
+      saveJadwals();
+    }
+
+    // Placeholder hilang saat fokus & Enter untuk simpan
+    function clearOnFocus(el) {
+      el.dataset.oldph = el.placeholder;
+      el.placeholder = '';
+      el.select && el.select();
+    }
+    function restoreOnBlur(el) {
+      if (!el.value) el.placeholder = el.dataset.oldph || '';
+    }
+    function handleEnter(e, idx, isSub, sidx) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        setTimeout(() => {
+          if (document.activeElement === e.target) e.target.blur();
+        }, 50);
+      }
+    }
+
+    // Gradien warna lembut sub-jadwal
+    function getSubGrad(si) {
+      const gradients = [
+        'linear-gradient(90deg, #f3fefd 0%, #f7e6ff 100%)',
+        'linear-gradient(90deg, #f7f7fa 0%, #e7f8fa 100%)',
+        'linear-gradient(90deg, #fdf7fa 0%, #e8f8fd 100%)',
+        'linear-gradient(90deg, #f3fafd 0%, #f9fbe7 100%)',
+        'linear-gradient(90deg, #e7f8fa 0%, #f7f7fa 100%)',
+        'linear-gradient(90deg, #f9fbe7 0%, #f3fafd 100%)',
+        'linear-gradient(90deg, #f7e6ff 0%, #f3fefd 100%)'
+      ];
+      return gradients[si % gradients.length];
+    }
+
+    // Render jadwal utama & sub-jadwal
     function renderJadwal() {
       let html = '';
       jadwals.forEach((item, i) => {
-        html += `<div class="jadwal-row">
-          <input type="text" class="jam" maxlength="5" value="${item.jam}" onchange="jadwals[${i}].jam=this.value;saveJadwals();renderJadwal()">
-          <input type="text" maxlength="30" placeholder="Aktivitas..." value="${item.text}" onchange="jadwals[${i}].text=this.value;saveJadwals();">
+        html += `<div class="jadwal-row" data-idx="${i}" data-jam="${item.jam || ''}">
+          <span onclick="toggleAlarm(${i})" style="margin-right:7px;">
+            ${alarmIcon(!!item.alarm)}
+          </span>
+          ${timePicker(item.jam, i)}
+          <input type="text" maxlength="30" 
+            placeholder="${item.text ? '' : 'Aktivitas...'}" 
+            value="${item.text || ''}"
+            onfocus="clearOnFocus(this)" onblur="restoreOnBlur(this)"
+            onkeydown="handleEnter(event,${i},false)"
+            onchange="jadwals[${i}].text=this.value;saveJadwals();"
+            />
           <div class="actions">
-            <button class="btn add" title="Tambah" onclick="jadwals.splice(${i}+1,0,{jam:'',text:''});saveJadwals();renderJadwal()">＋</button>
-            <button class="btn" title="Hapus" onclick="delJadwal(${i})">🗑️</button>
+            <button class="btn add" title="Tambah sub-jadwal" onclick="addSubJadwal(${i})">${svgPlus()}</button>
+            <button class="btn" title="Hapus" onclick="jadwals.splice(${i},1);saveJadwals();renderJadwal()">${svgTrash()}</button>
           </div>
         </div>`;
+        // Render sub-jadwal
+        if (item.subs && item.subs.length > 0) {
+          item.subs.forEach((sub, si) => {
+            let grad = getSubGrad(si);
+            html += `<div class="sub-task-row" style="background:${grad};" data-parent="${i}">
+              <input type="text" maxlength="25" placeholder="Sub aktivitas..." value="${sub.text || ''}"
+                onfocus="clearOnFocus(this)" onblur="restoreOnBlur(this)"
+                onkeydown="handleEnter(event,${i},true,${si})"
+                onchange="jadwals[${i}].subs[${si}].text=this.value;saveJadwals();"
+                />
+              <button class="btn" title="Hapus sub-jadwal" onclick="delSubJadwal(${i},${si})">${svgTrash("#bbb")}</button>
+            </div>`;
+          });
+        }
       });
       document.getElementById('jadwalList').innerHTML = html || '<div style="color:#aaa;margin:1rem 0">Belum ada jadwal. Tambahkan dengan tombol di bawah.</div>';
     }
 
+    function addJadwalUI() {
+      const now = new Date();
+      let jam = now.getHours().toString().padStart(2,'0') + ':' + (now.getMinutes()<30?'00':'30');
+      jadwals.push({ jam, text: "", alarm: false, subs: [] });
+      saveJadwals();
+      renderJadwal();
+      setTimeout(() => {
+        const el = document.querySelector('.jadwal-row:last-child input[type="text"]');
+        if (el) el.focus();
+      }, 50);
+    }
+
     // --- Daftar Tugas ---
-    let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+    let tasks = JSON.parse(localStorage.getItem('tasks_svg') || '[]');
     function saveTasks() {
-      localStorage.setItem('tasks', JSON.stringify(tasks));
+      localStorage.setItem('tasks_svg', JSON.stringify(tasks));
       renderStats();
     }
     function addTask(text = '') {
@@ -438,17 +626,19 @@
       tasks.forEach((item, i) => {
         html += `<div class="task-row${item.done ? ' done' : ''}">
           <input type="checkbox" ${item.done ? 'checked':''} onclick="tasks[${i}].done=this.checked;saveTasks();renderTasks()">
-          <input type="text" maxlength="40" placeholder="Tugas..." value="${item.text}" onchange="tasks[${i}].text=this.value;saveTasks();">
+          <input type="text" maxlength="40" placeholder="Tugas..." value="${item.text}" 
+            onfocus="clearOnFocus(this)" onblur="restoreOnBlur(this)"
+            onkeydown="if(event.key==='Enter'){event.target.blur();}"
+            onchange="tasks[${i}].text=this.value;saveTasks();">
           <div class="actions">
-            <button class="btn add" title="Tambah" onclick="tasks.splice(${i}+1,0,{text:'',done:false});saveTasks();renderTasks()">＋</button>
-            <button class="btn" title="Hapus" onclick="delTask(${i})">🗑️</button>
+            <button class="btn add" title="Tambah" onclick="tasks.splice(${i}+1,0,{text:'',done:false});saveTasks();renderTasks()">${svgPlus("#36b9cc")}</button>
+            <button class="btn" title="Hapus" onclick="delTask(${i})">${svgTrash()}</button>
           </div>
         </div>`;
       });
       document.getElementById('taskList').innerHTML = html || '<div style="color:#aaa;margin:1rem 0">Belum ada tugas. Tambahkan dengan tombol di bawah.</div>';
       renderStats();
     }
-
     // --- Statistik Atas ---
     function renderStats() {
       const total = tasks.length;
@@ -458,11 +648,10 @@
       document.getElementById('doneTasks').textContent = done;
       document.getElementById('pendingTasks').textContent = pending;
     }
-
     // --- Tracker Harian ---
-    let trackers = JSON.parse(localStorage.getItem('trackers') || '[]');
+    let trackers = JSON.parse(localStorage.getItem('trackers_svg') || '[]');
     function saveTrackers() {
-      localStorage.setItem('trackers', JSON.stringify(trackers));
+      localStorage.setItem('trackers_svg', JSON.stringify(trackers));
     }
     function addTracker(name = '', target = 1, val = 0) {
       trackers.push({ name, target, val });
@@ -481,12 +670,12 @@
             <input type="text" maxlength="20" placeholder="Nama tracker..." value="${tr.name}" onchange="trackers[${i}].name=this.value;saveTrackers();">
             <input type="number" min="1" max="99" value="${tr.target}" onchange="trackers[${i}].target=+this.value;saveTrackers();renderTrackers()" title="Target">
             <span style="color:var(--muted);font-size:.98rem;">Target</span>
-            <button class="btn" title="Hapus" onclick="delTracker(${i})">🗑️</button>
+            <button class="btn" title="Hapus" onclick="delTracker(${i})">${svgTrash()}</button>
           </div>
           <div class="tracker-controls">
-            <button onclick="trackers[${i}].val=Math.max(0,trackers[${i}].val-1);saveTrackers();renderTrackers()">−</button>
+            <button onclick="trackers[${i}].val=Math.max(0,trackers[${i}].val-1);saveTrackers();renderTrackers()">${svgPlus("#36b9cc").replace(/plus/, "minus")}</button>
             <span style="min-width:32px;text-align:center;font-weight:600;">${tr.val}</span>
-            <button onclick="trackers[${i}].val=Math.min(trackers[${i}].target,trackers[${i}].val+1);saveTrackers();renderTrackers()">＋</button>
+            <button onclick="trackers[${i}].val=Math.min(trackers[${i}].target,trackers[${i}].val+1);saveTrackers();renderTrackers()">${svgPlus("#36b9cc")}</button>
           </div>
           <div class="progress-bar"><div class="progress-bar-inner" style="width:${percent}%"></div></div>
           <div class="progress-bar-label">${percent}% tercapai</div>
@@ -494,29 +683,34 @@
       });
       document.getElementById('trackerList').innerHTML = html || '<div style="color:#aaa;margin:1rem 0">Belum ada tracker. Tambahkan dengan tombol di bawah.</div>';
     }
-
     // --- INIT ---
-    if (jadwals.length === 0) {
-      jadwals = [
-        {jam:"06:00", text:"Morning routine..."},
-        {jam:"09:00", text:"Mulai kerja..."},
-        {jam:"12:00", text:"Istirahat makan siang..."},
-        {jam:"15:00", text:"Aktivitas sore..."},
-        {jam:"18:00", text:"Waktu santai..."}
-      ];
+    if (!jadwals.length) {
+      jadwals = [ {jam:"06:00", text:"Morning routine...", alarm: false, subs:[]} ];
       saveJadwals();
     }
     renderJadwal();
+
+    if (tasks.length === 0) {
+      tasks = [];
+      saveTasks();
+    }
     renderTasks();
     renderTrackers();
     renderStats();
-    // Expose functions for inline HTML usage
-    window.addJadwal = addJadwal;
-    window.delJadwal = delJadwal;
+
+    // Expose for HTML
+    window.toggleAlarm = toggleAlarm;
+    window.addSubJadwal = addSubJadwal;
+    window.delSubJadwal = delSubJadwal;
+    window.updateJam = updateJam;
+    window.addJadwalUI = addJadwalUI;
     window.addTask = addTask;
     window.delTask = delTask;
     window.addTracker = addTracker;
     window.delTracker = delTracker;
+    window.clearOnFocus = clearOnFocus;
+    window.restoreOnBlur = restoreOnBlur;
+    window.handleEnter = handleEnter;
   </script>
 </body>
 </html>
