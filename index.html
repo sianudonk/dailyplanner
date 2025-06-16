@@ -2,73 +2,521 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Daily Planner Sederhana</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Planner Modern</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:,">
   <style>
-    body { font-family: Arial, sans-serif; background: #f6f8fa; margin: 0; padding: 0; }
-    .container { max-width: 400px; margin: 40px auto; background: #fff; padding: 24px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);}
-    h2 { text-align: center; color: #2d3748; }
-    .task-input { display: flex; margin-bottom: 16px; }
-    .task-input input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 5px 0 0 5px; font-size: 16px;}
-    .task-input button { padding: 10px 18px; background: #2563eb; color: #fff; border: none; border-radius: 0 5px 5px 0; cursor: pointer; font-size: 16px;}
-    ul { list-style: none; padding: 0; }
-    li { display: flex; align-items: center; margin-bottom: 10px; background: #f1f5f9; border-radius: 5px; padding: 8px 10px;}
-    li.done { text-decoration: line-through; opacity: 0.6; }
-    li button { margin-left: auto; background: #ef4444; color: #fff; border: none; border-radius: 4px; cursor: pointer; padding: 5px 10px;}
-    .footer { text-align: center; color: #888; font-size: 13px; margin-top: 24px;}
+    :root {
+      --primary: #36b9cc;
+      --accent: #8f5eff;
+      --success: #43E97B;
+      --bg: #f7f9fd;
+      --card: #f4f6fb;
+      --border: #e7eaf3;
+      --text: #222;
+      --muted: #999;
+      --danger: #FF6363;
+      --pending: #FFA600;
+      --radius: 16px;
+    }
+    body {
+      background: var(--bg);
+      font-family: 'Montserrat', 'Roboto', sans-serif;
+      color: var(--text);
+      margin: 0;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 600px;
+      margin: 36px auto;
+      padding: 1.5rem 0.7rem 3rem 0.7rem;
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin: 0 0 0.5rem 0;
+    }
+    .stats {
+      display: flex;
+      gap: 1rem;
+      justify-content: space-between;
+      margin-bottom: 1.8rem;
+    }
+    .stat {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 1rem 1.3rem;
+      text-align: center;
+      box-shadow: 0 2px 12px #0001;
+      min-width: 90px;
+      font-size: 1.05rem;
+      border: 1.5px solid var(--border);
+    }
+    .stat .num {
+      font-size: 1.6rem;
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+      display: block;
+    }
+    .stat.total .num { color: var(--primary);}
+    .stat.done .num { color: var(--success);}
+    .stat.pending .num { color: var(--pending);}
+    section {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 14px #0000;
+      margin-bottom: 2rem;
+      padding: 1.1rem 1.2rem 1.8rem 1.2rem;
+      border: 2px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    section h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin: 0 0 1.2rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    section h2 .dot {
+      width: 9px;
+      height: 9px;
+      background: var(--primary);
+      border-radius: 50%;
+      display: inline-block;
+    }
+    section h2 .icon {
+      font-size: 1.2em;
+      color: var(--primary);
+    }
+    .list {
+      margin: 0; padding: 0;
+      list-style: none;
+    }
+    /* Jadwal Harian */
+    .jadwal-row {
+      display: flex;
+      gap: 0.9rem;
+      align-items: center;
+      margin-bottom: 1.05rem;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 1px 6px #0001;
+      border: 1px solid var(--border);
+      padding: 0.5rem 0.7rem;
+      transition: box-shadow .18s;
+    }
+    .jadwal-row input[type="text"] {
+      border: none;
+      background: transparent;
+      font-size: 1.08rem;
+      flex: 1;
+      color: var(--text);
+      font-family: inherit;
+    }
+    .jadwal-row input[type="text"]:focus {
+      outline: 1.5px solid var(--primary);
+      background: #f3f9ff;
+    }
+    .jadwal-row .jam {
+      font-weight: bold;
+      color: var(--primary);
+      min-width: 46px;
+      font-size: 1.07rem;
+      letter-spacing: .5px;
+    }
+    .jadwal-row .actions {
+      display: flex; gap: 0.2rem;
+    }
+    .jadwal-row .btn {
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: var(--muted);
+      transition: color .14s;
+      margin-left: 3px;
+    }
+    .jadwal-row .btn:hover { color: var(--danger);}
+    .jadwal-row .btn.add:hover { color: var(--primary);}
+    .btn-add-row {
+      margin: 0.5rem 0 0 0;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.55rem 1.2rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .18s;
+      display: block;
+    }
+    .btn-add-row:hover { background: #2aaebc;}
+    /* Daftar Tugas */
+    .task-row {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1.07rem;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 1px 6px #0001;
+      border: 1px solid var(--border);
+      padding: 0.5rem 0.7rem;
+      transition: box-shadow .18s;
+      position: relative;
+    }
+    .task-row input[type="checkbox"] {
+      width: 1.15em;
+      height: 1.15em;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+    .task-row input[type="text"] {
+      border: none;
+      background: transparent;
+      font-size: 1.07rem;
+      flex: 1;
+      color: var(--text);
+      font-family: inherit;
+      transition: color .18s;
+    }
+    .task-row input[type="text"]:focus {
+      outline: 1.5px solid var(--primary);
+      background: #f3f9ff;
+    }
+    .task-row.done input[type="text"] {
+      color: #bbb;
+      text-decoration: line-through;
+    }
+    .task-row .actions {
+      display: flex; gap: 0.2rem;
+    }
+    .task-row .btn {
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: var(--muted);
+      transition: color .14s;
+      margin-left: 3px;
+    }
+    .task-row .btn:hover { color: var(--danger);}
+    .task-row .btn.add:hover { color: var(--primary);}
+    .btn-add-task {
+      margin: 0.5rem 0 0 0;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.55rem 1.2rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .18s;
+      display: block;
+    }
+    .btn-add-task:hover { background: #2aaebc;}
+    /* Tracker */
+    .tracker-header {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 1.1rem;
+    }
+    .tracker-row {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 1px 6px #0001;
+      border: 1px solid var(--border);
+      margin-bottom: 1.1rem;
+      padding: 0.7rem 0.7rem 1.1rem 0.7rem;
+      position: relative;
+    }
+    .tracker-row .header {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-bottom: 0.7rem;
+    }
+    .tracker-row input[type="text"] {
+      border: none;
+      background: transparent;
+      font-size: 1.08rem;
+      font-weight: 500;
+      color: var(--primary);
+      flex: 1;
+      min-width: 55px;
+      font-family: inherit;
+    }
+    .tracker-row input[type="text"]:focus {
+      outline: 1.5px solid var(--primary);
+      background: #f3f9ff;
+    }
+    .tracker-row input[type="number"] {
+      width: 60px;
+      border: 1.2px solid var(--border);
+      border-radius: 7px;
+      padding: 4px 5px;
+      font-size: 1.03rem;
+      margin-left: 8px;
+      text-align: right;
+      font-family: inherit;
+    }
+    .tracker-row .btn {
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: var(--muted);
+      transition: color .14s;
+      margin-left: 3px;
+    }
+    .tracker-row .btn:hover { color: var(--danger);}
+    .tracker-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.55rem;
+    }
+    .tracker-controls button {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      padding: 0.25rem 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .tracker-controls button:hover { background: #2aaebc;}
+    .progress-bar {
+      width: 100%;
+      height: 15px;
+      background: #e7eaf3;
+      border-radius: 8px;
+      margin-top: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    .progress-bar-inner {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary) 60%, var(--accent));
+      border-radius: 8px;
+      transition: width .35s cubic-bezier(.72,.3,.29,1.18);
+      width: 0%;
+    }
+    .progress-bar-label {
+      font-size: 0.94rem;
+      margin-top: 5px;
+      color: var(--muted);
+      text-align: right;
+    }
+    .btn-add-tracker {
+      margin: 0.5rem 0 0 0;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.55rem 1.2rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .18s;
+      display: block;
+    }
+    .btn-add-tracker:hover { background: #2aaebc;}
+    @media (max-width: 650px) {
+      .container { max-width: 99vw;}
+      .stat { padding: 0.8rem 0.7rem;}
+      section { padding: 0.7rem 0.3rem 1.2rem 0.3rem;}
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>Daily Planner</h2>
-    <div class="task-input">
-      <input type="text" id="task-input" placeholder="Tambah tugas harian...">
-      <button onclick="addTask()">Tambah</button>
+    <h1>Daily Planner</h1>
+    <div class="stats">
+      <div class="stat total">
+        <span class="num" id="totalTasks">0</span>
+        Total Tugas
+      </div>
+      <div class="stat done">
+        <span class="num" id="doneTasks">0</span>
+        Tugas Selesai
+      </div>
+      <div class="stat pending">
+        <span class="num" id="pendingTasks">0</span>
+        Tertunda
+      </div>
     </div>
-    <ul id="task-list"></ul>
-  </div>
-  <div class="footer">
-    &copy; 2025. Planner sederhana. Gratis!
+    <!-- Jadwal Harian -->
+    <section>
+      <h2>
+        <span class="dot"></span>
+        <span class="icon">⏰</span>
+        Jadwal Harian
+      </h2>
+      <div id="jadwalList"></div>
+      <button class="btn-add-row" onclick="addJadwal()">+ Tambah Jadwal</button>
+    </section>
+    <!-- Daftar Tugas -->
+    <section>
+      <h2>
+        <span class="dot"></span>
+        <span class="icon">✔️</span>
+        Daftar Tugas
+      </h2>
+      <div id="taskList"></div>
+      <button class="btn-add-task" onclick="addTask()">+ Tambah Tugas</button>
+    </section>
+    <!-- Tracker -->
+    <section>
+      <h2>
+        <span class="dot"></span>
+        <span class="icon">📈</span>
+        Tracker Harian
+      </h2>
+      <div id="trackerList"></div>
+      <button class="btn-add-tracker" onclick="addTracker()">+ Tambah Tracker</button>
+    </section>
   </div>
   <script>
-    let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-    function renderTasks() {
-      const list = document.getElementById('task-list');
-      list.innerHTML = '';
-      tasks.forEach((task, i) => {
-        const li = document.createElement('li');
-        li.className = task.done ? 'done' : '';
-        li.innerHTML = `
-          <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggleTask(${i})">
-          <span style="margin-left:8px">${task.text}</span>
-          <button onclick="deleteTask(${i})">Hapus</button>
-        `;
-        list.appendChild(li);
+    // --- Jadwal Harian ---
+    let jadwals = JSON.parse(localStorage.getItem('jadwals') || '[]');
+    function saveJadwals() {
+      localStorage.setItem('jadwals', JSON.stringify(jadwals));
+    }
+    function addJadwal(jam = '', text = '') {
+      jadwals.push({ jam: jam || defJam(jadwals.length), text });
+      saveJadwals(); renderJadwal();
+    }
+    function delJadwal(idx) {
+      jadwals.splice(idx, 1);
+      saveJadwals(); renderJadwal();
+    }
+    function defJam(idx) {
+      const def = ["06:00","09:00","12:00","15:00","18:00"];
+      return def[idx] || "";
+    }
+    function renderJadwal() {
+      let html = '';
+      jadwals.forEach((item, i) => {
+        html += `<div class="jadwal-row">
+          <input type="text" class="jam" maxlength="5" value="${item.jam}" onchange="jadwals[${i}].jam=this.value;saveJadwals();renderJadwal()">
+          <input type="text" maxlength="30" placeholder="Aktivitas..." value="${item.text}" onchange="jadwals[${i}].text=this.value;saveJadwals();">
+          <div class="actions">
+            <button class="btn add" title="Tambah" onclick="jadwals.splice(${i}+1,0,{jam:'',text:''});saveJadwals();renderJadwal()">＋</button>
+            <button class="btn" title="Hapus" onclick="delJadwal(${i})">🗑️</button>
+          </div>
+        </div>`;
       });
+      document.getElementById('jadwalList').innerHTML = html || '<div style="color:#aaa;margin:1rem 0">Belum ada jadwal. Tambahkan dengan tombol di bawah.</div>';
     }
-    function addTask() {
-      const input = document.getElementById('task-input');
-      const text = input.value.trim();
-      if (!text) return;
-      tasks.push({ text, done: false });
-      input.value = '';
-      saveTasks();
-    }
-    function toggleTask(i) {
-      tasks[i].done = !tasks[i].done;
-      saveTasks();
-    }
-    function deleteTask(i) {
-      if (confirm('Hapus tugas ini?')) {
-        tasks.splice(i, 1);
-        saveTasks();
-      }
-    }
+
+    // --- Daftar Tugas ---
+    let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
     function saveTasks() {
       localStorage.setItem('tasks', JSON.stringify(tasks));
-      renderTasks();
+      renderStats();
     }
+    function addTask(text = '') {
+      tasks.push({ text, done: false });
+      saveTasks(); renderTasks();
+    }
+    function delTask(idx) {
+      tasks.splice(idx, 1);
+      saveTasks(); renderTasks();
+    }
+    function renderTasks() {
+      let html = '';
+      tasks.forEach((item, i) => {
+        html += `<div class="task-row${item.done ? ' done' : ''}">
+          <input type="checkbox" ${item.done ? 'checked':''} onclick="tasks[${i}].done=this.checked;saveTasks();renderTasks()">
+          <input type="text" maxlength="40" placeholder="Tugas..." value="${item.text}" onchange="tasks[${i}].text=this.value;saveTasks();">
+          <div class="actions">
+            <button class="btn add" title="Tambah" onclick="tasks.splice(${i}+1,0,{text:'',done:false});saveTasks();renderTasks()">＋</button>
+            <button class="btn" title="Hapus" onclick="delTask(${i})">🗑️</button>
+          </div>
+        </div>`;
+      });
+      document.getElementById('taskList').innerHTML = html || '<div style="color:#aaa;margin:1rem 0">Belum ada tugas. Tambahkan dengan tombol di bawah.</div>';
+      renderStats();
+    }
+
+    // --- Statistik Atas ---
+    function renderStats() {
+      const total = tasks.length;
+      const done = tasks.filter(t=>t.done).length;
+      const pending = total - done;
+      document.getElementById('totalTasks').textContent = total;
+      document.getElementById('doneTasks').textContent = done;
+      document.getElementById('pendingTasks').textContent = pending;
+    }
+
+    // --- Tracker Harian ---
+    let trackers = JSON.parse(localStorage.getItem('trackers') || '[]');
+    function saveTrackers() {
+      localStorage.setItem('trackers', JSON.stringify(trackers));
+    }
+    function addTracker(name = '', target = 1, val = 0) {
+      trackers.push({ name, target, val });
+      saveTrackers(); renderTrackers();
+    }
+    function delTracker(idx) {
+      trackers.splice(idx, 1);
+      saveTrackers(); renderTrackers();
+    }
+    function renderTrackers() {
+      let html = '';
+      trackers.forEach((tr, i) => {
+        let percent = tr.target>0 ? Math.min(100,Math.round(tr.val/tr.target*100)) : 0;
+        html += `<div class="tracker-row">
+          <div class="header">
+            <input type="text" maxlength="20" placeholder="Nama tracker..." value="${tr.name}" onchange="trackers[${i}].name=this.value;saveTrackers();">
+            <input type="number" min="1" max="99" value="${tr.target}" onchange="trackers[${i}].target=+this.value;saveTrackers();renderTrackers()" title="Target">
+            <span style="color:var(--muted);font-size:.98rem;">Target</span>
+            <button class="btn" title="Hapus" onclick="delTracker(${i})">🗑️</button>
+          </div>
+          <div class="tracker-controls">
+            <button onclick="trackers[${i}].val=Math.max(0,trackers[${i}].val-1);saveTrackers();renderTrackers()">−</button>
+            <span style="min-width:32px;text-align:center;font-weight:600;">${tr.val}</span>
+            <button onclick="trackers[${i}].val=Math.min(trackers[${i}].target,trackers[${i}].val+1);saveTrackers();renderTrackers()">＋</button>
+          </div>
+          <div class="progress-bar"><div class="progress-bar-inner" style="width:${percent}%"></div></div>
+          <div class="progress-bar-label">${percent}% tercapai</div>
+        </div>`;
+      });
+      document.getElementById('trackerList').innerHTML = html || '<div style="color:#aaa;margin:1rem 0">Belum ada tracker. Tambahkan dengan tombol di bawah.</div>';
+    }
+
+    // --- INIT ---
+    if (jadwals.length === 0) {
+      jadwals = [
+        {jam:"06:00", text:"Morning routine..."},
+        {jam:"09:00", text:"Mulai kerja..."},
+        {jam:"12:00", text:"Istirahat makan siang..."},
+        {jam:"15:00", text:"Aktivitas sore..."},
+        {jam:"18:00", text:"Waktu santai..."}
+      ];
+      saveJadwals();
+    }
+    renderJadwal();
     renderTasks();
+    renderTrackers();
+    renderStats();
+    // Expose functions for inline HTML usage
+    window.addJadwal = addJadwal;
+    window.delJadwal = delJadwal;
+    window.addTask = addTask;
+    window.delTask = delTask;
+    window.addTracker = addTracker;
+    window.delTracker = delTracker;
   </script>
 </body>
 </html>
