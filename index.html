@@ -3,8 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daily Planner</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;500&family=Roboto&display=swap" rel="stylesheet">
+  <title>Daily Planner Modern</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#36b9cc">
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <link rel="icon" href="data:,">
   <style>
     :root {
       --primary: #36b9cc;
@@ -18,7 +22,6 @@
       --danger: #FF6363;
       --pending: #FFA600;
       --radius: 16px;
-      --header-avatar-size: 62px;
     }
     body {
       background: var(--bg);
@@ -27,282 +30,16 @@
       margin: 0;
       min-height: 100vh;
     }
-    .onboard-bg {
-      min-height: 100vh;
-      width: 100vw;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(120deg, #f4f6fb 0%, #e7eaf3 100%);
-      position: fixed;
-      top: 0; left: 0;
-      z-index: 100;
-    }
-    .onboard-card {
-      background: #fff;
-      border-radius: 24px;
-      box-shadow: 0 10px 40px #0002;
-      padding: 2.7rem 2.2rem 2.5rem 2.2rem;
-      width: 100%;
-      max-width: 370px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      animation: fadeinup 0.7s cubic-bezier(.61,1.41,.36,1.01);
-    }
-    @keyframes fadeinup {
-      from { opacity: 0; transform: translateY(30px);}
-      to   { opacity: 1; transform: translateY(0);}
-    }
-    .onboard-title {
-      font-size: 2.2rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      margin-bottom: 1.7rem;
-      text-align: center;
-      color: var(--primary);
-      text-shadow: 0 4px 28px #36b9cc23;
-    }
-    .avatar-picker {
-      width: 106px;
-      height: 106px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #e6f6ff 0%, #e6e6ff 100%);
-      border: 3px solid #e7eaf3;
-      margin-bottom: 1.1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      overflow: hidden;
-      box-shadow: 0 4px 20px #8f5eff11;
-      position: relative;
-      transition: box-shadow .23s, border .23s;
-    }
-    .avatar-picker:hover, .avatar-picker:focus {
-      box-shadow: 0 0 0 5px #8f5eff22;
-      border: 3px solid var(--accent);
-    }
-    .avatar-picker .avatar-svg, .avatar-picker img {
-      width: 86px; height: 86px;
-      display: block;
-      object-fit: cover;
-      border-radius: 50%;
-      transition: filter .12s;
-    }
-    .avatar-picker input[type=file] { display:none; }
-    .avatar-upload-label {
-      position: absolute;
-      bottom: 7px; right: 7px;
-      background: var(--primary);
-      color: #fff;
-      font-size: 0.72rem;
-      border-radius: 50%;
-      width: 22px; height: 22px;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 2px 8px #0001;
-      border: 1.5px solid #fff;
-      z-index: 2;
-      transition: background .18s;
-    }
-    .avatar-upload-label:hover {
-      background: var(--accent);
-    }
-    .avatar-upload-label svg {
-      width: 13px; height: 13px;
-      display: block;
-      stroke-width: 2.2;
-    }
-    .onboard-form {
-      width: 100%;
-      margin: 0;
-      margin-bottom: 0.5rem;
-      display: flex; flex-direction: column; align-items: center;
-    }
-    .onboard-input {
-      font-size: 1.18rem;
-      padding: 0.7rem 1.1rem;
-      border-radius: 10px;
-      border: 2.3px solid var(--border);
-      background: #f5f7fa;
-      color: var(--primary);
-      width: 100%;
-      outline: none;
-      font-family: inherit;
-      font-weight: 500;
-      margin-bottom: 0.4rem;
-      box-sizing: border-box;
-      text-align: center;
-      transition: border .18s, box-shadow .18s;
-    }
-    .onboard-input:focus {
-      border: 2.3px solid var(--accent);
-      background: #f4f6ff;
-      box-shadow: 0 1px 8px #8f5eff11;
-    }
-    .onboard-getstarted {
-      width: 56px; height: 56px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary) 38%, var(--accent) 86%);
-      border: none;
-      display: flex; align-items: center; justify-content: center;
-      margin: 1.2rem auto 0 auto;
-      cursor: pointer;
-      box-shadow: 0 6px 18px #43e97b25;
-      transition: background .18s, transform .13s;
-      font-size: 2.2rem;
-      color: #fff;
-      outline: none;
-      border: 2.5px solid #fff;
-      position: relative;
-      opacity: 0.5;
-      pointer-events: none;
-    }
-    .onboard-getstarted.active {
-      opacity: 1;
-      pointer-events: all;
-    }
-    .onboard-getstarted:active {
-      transform: scale(0.96);
-      background: linear-gradient(134deg, var(--accent) 38%, var(--primary) 86%);
-    }
-    .onboard-getstarted svg {
-      width: 34px; height: 34px;
-      display: block;
-    }
-    /* HEADER MINI GREETING */
-    .planner-header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 1.7rem;
-      margin-top: 15px;
-      justify-content: flex-start;
-      padding-left: .3rem;
-    }
-    .planner-avatar {
-      width: var(--header-avatar-size);
-      height: var(--header-avatar-size);
-      border-radius: 50%;
-      background: #fff;
-      box-shadow: 0 2px 16px #8f5eff11;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      border: 1.5px solid #fff;
-      flex-shrink: 0;
-      cursor: pointer;
-      position: relative;
-      transition: border .18s, box-shadow .18s;
-    }
-    .planner-avatar .avatar-svg, .planner-avatar img {
-      width: calc(var(--header-avatar-size) - 8px);
-      height: calc(var(--header-avatar-size) - 8px);
-      object-fit: cover;
-      border-radius: 50%;
-      display: block;
-    }
-    .planner-avatar:hover, .planner-avatar:focus {
-      border: 1.5px solid var(--accent);
-      box-shadow: 0 0 0 5px #8f5eff22;
-    }
-    .avatar-upload-label-header {
-      position: absolute;
-      bottom: 4px; right: 4px;
-      background: var(--primary);
-      color: #fff;
-      font-size: 0.72rem;
-      border-radius: 50%;
-      width: 16px; height: 16px;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 2px 8px #0001;
-      border: 1.2px solid #fff;
-      z-index: 2;
-      opacity: 0.92;
-      transition: opacity .18s, background .18s;
-      pointer-events: none;
-      user-select: none;
-    }
-    .planner-avatar:hover .avatar-upload-label-header,
-    .planner-avatar:focus .avatar-upload-label-header {
-      opacity: 1;
-      pointer-events: all;
-      user-select: auto;
-      background: var(--accent);
-    }
-    .avatar-upload-label-header svg {
-      width: 10px; height: 10px;
-      display: block;
-      stroke-width: 2.2;
-    }
-    .planner-greet {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    .planner-greet-main {
-      font-size: 1.37rem;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 2px;
-      letter-spacing: .3px;
-    }
-    .planner-greet-sub {
-      font-size: 1.02rem;
-      color: var(--muted);
-      font-weight: 500;
-      margin-bottom: 2px;
-      margin-left: 2px;
-    }
-    .planner-header .planner-bell {
-      margin-left: auto;
-      background: #fff;
-      border-radius: 50%;
-      width: 44px;
-      height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 9px #0001;
-      position: relative;
-      border: 2px solid #e7eaf3;
-      cursor: pointer;
-      transition: box-shadow .18s;
-    }
-    .planner-header .planner-bell svg {
-      width: 28px; height: 28px;
-      stroke: var(--muted);
-      display: block;
-      transition: stroke .18s;
-    }
-    .planner-header .planner-bell:hover svg {
-      stroke: var(--primary);
-    }
-    .planner-header .bell-dot {
-      position: absolute;
-      top: 8px; right: 8px;
-      width: 9px; height: 9px;
-      background: #FF6363;
-      border-radius: 50%;
-      border: 2px solid #fff;
-      box-shadow: 0 1px 5px #0001;
-    }
-    /* PLANNER COMPONENTS */
     .container {
       max-width: 600px;
       margin: 36px auto;
       padding: 1.5rem 0.7rem 3rem 0.7rem;
-      position: relative;
-      transition: filter .2s;
     }
-    .with-blur {
-      filter: blur(4px) brightness(0.99);
-      pointer-events: none;
-      user-select: none;
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin: 0 0 0.5rem 0;
     }
     .stats {
       display: flex;
@@ -319,7 +56,6 @@
       min-width: 90px;
       font-size: 1.05rem;
       border: 1.5px solid var(--border);
-      transition: box-shadow .15s, border .15s;
     }
     .stat .num {
       font-size: 1.6rem;
@@ -339,8 +75,6 @@
       border: 2px solid var(--border);
       position: relative;
       overflow: hidden;
-      min-height: 120px;
-      transition: box-shadow .14s, border .14s;
     }
     section h2 {
       font-size: 1.35rem;
@@ -350,10 +84,22 @@
       align-items: center;
       gap: 0.6rem;
     }
-    .section-svg { width: 24px; height: 24px; vertical-align: middle; display: inline-block; }
-    .section-svg-alarm { stroke: #36b9cc; fill: none; }
-    .section-svg-check { stroke: #43E97B; fill: none; }
-    .section-svg-tracker { stroke: #8f5eff; fill: none; }
+    section h2 .dot {
+      width: 9px;
+      height: 9px;
+      background: var(--primary);
+      border-radius: 50%;
+      display: inline-block;
+    }
+    section h2 .icon {
+      font-size: 1.2em;
+      color: var(--primary);
+    }
+    .list {
+      margin: 0; padding: 0;
+      list-style: none;
+    }
+    /* Jadwal Harian */
     .jadwal-row {
       display: flex;
       gap: 0.9rem;
@@ -365,10 +111,6 @@
       border: 1px solid var(--border);
       padding: 0.5rem 0.7rem;
       transition: box-shadow .18s;
-      position: relative;
-      width: 100%;
-      box-sizing: border-box;
-      transition: box-shadow .17s, border .17s;
     }
     .jadwal-row input[type="text"] {
       border: none;
@@ -377,55 +119,33 @@
       flex: 1;
       color: var(--text);
       font-family: inherit;
-      padding: 8px 0;
-      transition: background .15s;
-      min-width: 0;
     }
     .jadwal-row input[type="text"]:focus {
       outline: 1.5px solid var(--primary);
       background: #f3f9ff;
     }
-    .custom-timepicker {
-      display: flex;
-      align-items: center;
-      gap: 2px;
-      background: #f3fafd;
-      border: 1.5px solid var(--border);
-      border-radius: 7px;
-      padding: 4px 10px;
-      min-width: 110px;
-      box-sizing: border-box;
-      transition: border .18s, background .18s;
-    }
-    .custom-timepicker select {
-      border: none;
-      background: transparent;
-      font-size: 1.08rem;
-      color: var(--primary);
-      font-family: inherit;
-      outline: none;
-      appearance: none;
-      padding: 3px 2px;
-      cursor: pointer;
-      transition: background .2s;
-      border-radius: 6px;
-    }
-    .custom-timepicker select:focus {
-      background: #e9faff;
-    }
-    .custom-timepicker .separator {
-      color: var(--muted);
+    .jadwal-row .jam {
       font-weight: bold;
-      font-size: 1.08rem;
-      padding: 0 2px;
-      user-select: none;
+      color: var(--primary);
+      min-width: 46px;
+      font-size: 1.07rem;
+      letter-spacing: .5px;
     }
-    .custom-timepicker:hover,
-    .custom-timepicker:focus-within {
-      border: 1.5px solid var(--primary);
-      background: #e9faff;
+    .jadwal-row .actions {
+      display: flex; gap: 0.2rem;
     }
-    .btn-add-row, .btn-add-task, .btn-add-tracker {
+    .jadwal-row .btn {
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: var(--muted);
+      transition: color .14s;
+      margin-left: 3px;
+    }
+    .jadwal-row .btn:hover { color: var(--danger);}
+    .jadwal-row .btn.add:hover { color: var(--primary);}
+    .btn-add-row {
       margin: 0.5rem 0 0 0;
       background: var(--primary);
       color: #fff;
@@ -435,31 +155,29 @@
       font-size: 1.05rem;
       font-weight: 600;
       cursor: pointer;
-      transition: background .18s, box-shadow .18s;
+      transition: background .18s;
+      display: block;
+    }
+    .btn-add-row:hover { background: #2aaebc;}
+    /* Daftar Tugas */
+    .task-row {
       display: flex;
       align-items: center;
-      gap: 0.5em;
-      justify-content: center;
-      box-shadow: 0 2px 10px #36b9cc15, 0 2px 2px #0001;
-    }
-    .btn-add-row svg, .btn-add-task svg, .btn-add-tracker svg { vertical-align: middle;}
-    .btn-add-row:hover, .btn-add-task:hover, .btn-add-tracker:hover { background: #2aaebc; }
-    .task-row, .tracker-row {
+      gap: 0.8rem;
+      margin-bottom: 1.07rem;
       background: #fff;
       border-radius: 10px;
       box-shadow: 0 1px 6px #0001;
       border: 1px solid var(--border);
       padding: 0.5rem 0.7rem;
-      margin-bottom: 1.07rem;
-      transition: box-shadow .17s, border .17s;
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
+      transition: box-shadow .18s;
       position: relative;
     }
-    .task-row input[type="checkbox"] { 
-      width: 1.15em; height: 1.15em; accent-color: var(--primary); cursor: pointer; 
-      margin-right: 8px;
+    .task-row input[type="checkbox"] {
+      width: 1.15em;
+      height: 1.15em;
+      accent-color: var(--primary);
+      cursor: pointer;
     }
     .task-row input[type="text"] {
       border: none;
@@ -470,25 +188,105 @@
       font-family: inherit;
       transition: color .18s;
     }
-    .task-row input[type="text"]:focus { outline: 1.5px solid var(--primary); background: #f3f9ff;}
-    .task-row.done input[type="text"] { color: #bbb; text-decoration: line-through;}
-    .task-row .actions { display: flex; gap: 0.2rem;}
-    .task-row .btn {
-      background: none; border: none; font-size: 1.1rem; cursor: pointer;
-      color: var(--muted); transition: color .14s; margin-left: 3px; padding: 0; line-height: 1;
+    .task-row input[type="text"]:focus {
+      outline: 1.5px solid var(--primary);
+      background: #f3f9ff;
     }
-    .task-row .btn svg { vertical-align: middle;}
+    .task-row.done input[type="text"] {
+      color: #bbb;
+      text-decoration: line-through;
+    }
+    .task-row .actions {
+      display: flex; gap: 0.2rem;
+    }
+    .task-row .btn {
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: var(--muted);
+      transition: color .14s;
+      margin-left: 3px;
+    }
     .task-row .btn:hover { color: var(--danger);}
     .task-row .btn.add:hover { color: var(--primary);}
-    .tracker-row .header { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.7rem;}
-    .tracker-row input[type="text"] { border: none; background: transparent; font-size: 1.08rem; font-weight: 500; color: var(--primary); flex: 1; min-width: 55px; font-family: inherit;}
-    .tracker-row input[type="text"]:focus { outline: 1.5px solid var(--primary); background: #f3f9ff;}
-    .tracker-row input[type="number"] { width: 60px; border: 1.2px solid var(--border); border-radius: 7px; padding: 4px 5px; font-size: 1.03rem; margin-left: 8px; text-align: right; font-family: inherit;}
-    .tracker-row .btn { background: none; border: none; font-size: 1.1rem; cursor: pointer; color: var(--muted); transition: color .14s; margin-left: 3px; padding: 0; line-height: 1;}
-    .tracker-row .btn svg { vertical-align: middle;}
+    .btn-add-task {
+      margin: 0.5rem 0 0 0;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.55rem 1.2rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .18s;
+      display: block;
+    }
+    .btn-add-task:hover { background: #2aaebc;}
+    /* Tracker */
+    .tracker-header {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 1.1rem;
+    }
+    .tracker-row {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 1px 6px #0001;
+      border: 1px solid var(--border);
+      margin-bottom: 1.1rem;
+      padding: 0.7rem 0.7rem 1.1rem 0.7rem;
+      position: relative;
+    }
+    .tracker-row .header {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-bottom: 0.7rem;
+    }
+    .tracker-row input[type="text"] {
+      border: none;
+      background: transparent;
+      font-size: 1.08rem;
+      font-weight: 500;
+      color: var(--primary);
+      flex: 1;
+      min-width: 55px;
+      font-family: inherit;
+    }
+    .tracker-row input[type="text"]:focus {
+      outline: 1.5px solid var(--primary);
+      background: #f3f9ff;
+    }
+    .tracker-row input[type="number"] {
+      width: 60px;
+      border: 1.2px solid var(--border);
+      border-radius: 7px;
+      padding: 4px 5px;
+      font-size: 1.03rem;
+      margin-left: 8px;
+      text-align: right;
+      font-family: inherit;
+    }
+    .tracker-row .btn {
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: var(--muted);
+      transition: color .14s;
+      margin-left: 3px;
+    }
     .tracker-row .btn:hover { color: var(--danger);}
-    .tracker-controls { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.55rem;}
-    .tracker-controls button { 
+    .tracker-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.55rem;
+    }
+    .tracker-controls button {
       background: var(--primary);
       color: #fff;
       border: none;
@@ -498,125 +296,54 @@
       font-weight: 500;
       cursor: pointer;
       transition: background .15s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
-    .tracker-controls button svg {
-      stroke: #fff !important;
-      color: #fff !important;
-      fill: none;
-    }
-    .tracker-controls button:disabled {
-      background: #e3e3e3;
-      color: #bdbdbd;
-      cursor: not-allowed;
-    }
-    .tracker-controls button:disabled svg {
-      stroke: #bdbdbd !important;
-      color: #bdbdbd !important;
-    }
-    .tracker-controls button:hover:not(:disabled) { background: #2aaebc;}
-    .tracker-row input[type="number"]:disabled { background: #f3f3f3; color: #aaa; border-color: #e3e3e3;}
-    .progress-bar { width: 100%; height: 15px; background: #e7eaf3; border-radius: 8px; margin-top: 8px; position: relative; overflow: hidden;}
-    .progress-bar-inner { height: 100%; background: linear-gradient(90deg, var(--primary) 60%, var(--accent)); border-radius: 8px; transition: width .35s cubic-bezier(.72,.3,.29,1.18); width: 0%;}
-    .progress-bar-label { font-size: 0.94rem; margin-top: 5px; color: var(--muted); text-align: right;}
-    .sub-task-row {
-      width: 85%;
-      margin: 0.3rem auto 0.3rem auto;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      padding: 0.7rem 1.1rem;
-      gap: 0.7rem;
-      box-sizing: border-box;
-      box-shadow: 0 1px 5px #0001;
-      transition: background .2s;
-      min-width: 0;
+    .tracker-controls button:hover { background: #2aaebc;}
+    .progress-bar {
+      width: 100%;
+      height: 15px;
+      background: #e7eaf3;
+      border-radius: 8px;
+      margin-top: 8px;
       position: relative;
+      overflow: hidden;
     }
-    .sub-task-row input[type="text"] {
-      flex: 1;
-      background: transparent;
-      border: none;
-      font-size: 1.07rem;
-      color: var(--text);
-      font-family: inherit;
-      padding: 8px 0;
-      transition: background .15s;
-      min-width: 0;
+    .progress-bar-inner {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary) 60%, var(--accent));
+      border-radius: 8px;
+      transition: width .35s cubic-bezier(.72,.3,.29,1.18);
+      width: 0%;
     }
-    .sub-task-row input[type="text"]:focus {
-      outline: 1.5px solid var(--primary);
-      background: #f3f9ff;
-    }
-    .sub-task-row .btn {
-      background: none;
-      border: none;
-      font-size: 1.1rem;
-      cursor: pointer;
+    .progress-bar-label {
+      font-size: 0.94rem;
+      margin-top: 5px;
       color: var(--muted);
-      transition: color .14s;
-      margin-left: 3px;
-      padding: 0;
-      line-height: 1;
+      text-align: right;
     }
-    .sub-task-row .btn svg { vertical-align: middle;}
-    .sub-task-row .btn:hover { color: var(--danger);}
+    .btn-add-tracker {
+      margin: 0.5rem 0 0 0;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.55rem 1.2rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .18s;
+      display: block;
+    }
+    .btn-add-tracker:hover { background: #2aaebc;}
     @media (max-width: 650px) {
       .container { max-width: 99vw;}
-      .onboard-card { padding: 1.3rem 0.3rem 1.5rem 0.3rem;}
       .stat { padding: 0.8rem 0.7rem;}
       section { padding: 0.7rem 0.3rem 1.2rem 0.3rem;}
-      .planner-header { gap: 7px; }
-      .planner-greet-main { font-size: 1.10rem;}
     }
-    .avatar-svg { background: none; }
   </style>
 </head>
 <body>
-  <!-- Onboarding Modal -->
-  <div id="onboard" class="onboard-bg">
-    <form class="onboard-card" autocomplete="off" onsubmit="return false;">
-      <div class="onboard-title">Daily Planner</div>
-      <label class="avatar-picker" tabindex="0" id="avatarPicker" aria-label="Pilih avatar">
-        <span id="avatarImage" class="avatar-svg"></span>
-        <input type="file" accept="image/*" id="avatarInput">
-        <span class="avatar-upload-label" title="Upload foto">
-          <svg width="13" height="13" fill="none" stroke="#fff" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-        </span>
-      </label>
-      <div style="height:0.7rem"></div>
-      <div class="onboard-form">
-        <input id="onboardName" class="onboard-input" maxlength="30" placeholder="Nama lengkap..." autocomplete="off" spellcheck="false">
-      </div>
-      <button id="onboardGo" class="onboard-getstarted" title="Get Started" tabindex="0" type="button">
-        <svg fill="none" stroke="white" stroke-width="2.3" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
-      </button>
-    </form>
-  </div>
-  <!-- MAIN APP UI -->
-  <div class="container with-blur" id="mainApp">
-    <!-- Header greeting + avatar -->
-    <div class="planner-header" id="plannerHeader" style="display:none">
-      <label class="planner-avatar" id="plannerAvatar" tabindex="0" aria-label="Ganti avatar" style="outline: none; position: relative;">
-        <span id="plannerAvatarImage"></span>
-        <input type="file" accept="image/*" id="plannerAvatarInput" style="display:none;">
-        <span class="avatar-upload-label-header" title="Ganti foto" tabindex="-1">
-          <svg width="10" height="10" fill="none" stroke="#fff" stroke-width="2.2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-        </span>
-      </label>
-      <div class="planner-greet">
-        <div class="planner-greet-main" id="plannerGreetMain"></div>
-        <div class="planner-greet-sub" id="plannerGreetSub"></div>
-      </div>
-      <div class="planner-bell" title="Notifikasi (prototipe)">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 3V5"/><path d="M19 8a7 7 0 1 0-14 0c0 7-2 9-2 9h18s-2-2-2-9"/><circle cx="18" cy="6" r="1.5" fill="#FF6363"/><path d="M9 22h6"/></svg>
-        <span class="bell-dot"></span>
-      </div>
-    </div>
-    <!-- ...lanjutan planner utama ... -->
-    <div id="plannerTitle" style="display:none"></div>
+  <div class="container">
+    <h1>Daily Planner</h1>
     <div class="stats">
       <div class="stat total">
         <span class="num" id="totalTasks">0</span>
@@ -635,381 +362,70 @@
     <section>
       <h2>
         <span class="dot"></span>
-        <span class="section-svg section-svg-alarm">
-          <svg width="24" height="24" fill="none" stroke-width="2" stroke="#36b9cc" viewBox="0 0 24 24">
-            <circle cx="12" cy="13" r="7"/>
-            <path d="M12 13V9M12 13L15 15"/>
-            <path d="M5 3L2 6"/>
-            <path d="M19 3l3 3"/>
-          </svg>
-        </span>
+        <span class="icon">⏰</span>
         Jadwal Harian
       </h2>
       <div id="jadwalList"></div>
-      <button class="btn-add-row" onclick="addJadwalUI()">
-        <span>
-        <svg width="20" height="20" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </span>Tambah Jadwal
-      </button>
+      <button class="btn-add-row" onclick="addJadwal()">+ Tambah Jadwal</button>
     </section>
-    <!-- Daftar Tugas dan Tracker (tetap seperti sebelumnya) -->
+    <!-- Daftar Tugas -->
     <section>
       <h2>
         <span class="dot"></span>
-        <span class="section-svg section-svg-check">
-          <svg width="24" height="24" fill="none" stroke-width="2" stroke="#43E97B" viewBox="0 0 24 24">
-            <rect x="3" y="3" width="18" height="18" rx="4" stroke="#43E97B"/>
-            <path d="M8 12.5l3 3 5-5" stroke="#43E97B" stroke-width="2" fill="none"/>
-          </svg>
-        </span>
+        <span class="icon">✔️</span>
         Daftar Tugas
       </h2>
       <div id="taskList"></div>
-      <button class="btn-add-task" onclick="addTask()">
-        <svg width="20" height="20" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Tambah Tugas
-      </button>
+      <button class="btn-add-task" onclick="addTask()">+ Tambah Tugas</button>
     </section>
+    <!-- Tracker -->
     <section>
       <h2>
         <span class="dot"></span>
-        <span class="section-svg section-svg-tracker">
-          <svg width="24" height="24" fill="none" stroke-width="2" stroke="#8f5eff" viewBox="0 0 24 24">
-            <rect x="4" y="17" width="3" height="3" fill="#8f5eff" stroke="#8f5eff"/>
-            <rect x="10.5" y="13" width="3" height="7" fill="#8f5eff" stroke="#8f5eff"/>
-            <rect x="17" y="9" width="3" height="11" fill="#8f5eff" stroke="#8f5eff"/>
-          </svg>
-        </span>
+        <span class="icon">📈</span>
         Tracker Harian
       </h2>
       <div id="trackerList"></div>
-      <button class="btn-add-tracker" onclick="addTracker()">
-        <svg width="20" height="20" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Tambah Tracker
-      </button>
+      <button class="btn-add-tracker" onclick="addTracker()">+ Tambah Tracker</button>
     </section>
   </div>
   <script>
-    // ===== FLAT AVATAR DATA =====
-    const flatAvatars = [
-      `<svg viewBox="0 0 86 86" xmlns="http://www.w3.org/2000/svg"><circle cx="43" cy="43" r="43" fill="#fbeeee"/><ellipse cx="43" cy="52" rx="23" ry="15" fill="#fbb8b8"/><ellipse cx="43" cy="48" rx="16" ry="12" fill="#fff"/><ellipse cx="34" cy="47" rx="3" ry="4" fill="#222"/><ellipse cx="52" cy="47" rx="3" ry="4" fill="#222"/><ellipse cx="43" cy="56" rx="5" ry="2.5" fill="#b77f7f"/><path d="M22 18l8 14M64 18l-8 14" stroke="#fbb8b8" stroke-width="3" stroke-linecap="round"/></svg>`,
-      `<svg viewBox="0 0 86 86" xmlns="http://www.w3.org/2000/svg"><circle cx="43" cy="43" r="43" fill="#fff"/><ellipse cx="25" cy="25" rx="10" ry="14" fill="#444"/><ellipse cx="61" cy="25" rx="10" ry="14" fill="#444"/><ellipse cx="43" cy="52" rx="23" ry="15" fill="#fff"/><ellipse cx="43" cy="48" rx="16" ry="12" fill="#fff"/><ellipse cx="34" cy="47" rx="4" ry="5" fill="#222"/><ellipse cx="52" cy="47" rx="4" ry="5" fill="#222"/><ellipse cx="43" cy="56" rx="5" ry="2.5" fill="#eee"/></svg>`,
-      `<svg viewBox="0 0 86 86" xmlns="http://www.w3.org/2000/svg"><circle cx="43" cy="43" r="43" fill="#eafceb"/><ellipse cx="43" cy="48" rx="25" ry="17" fill="#a8ebaf"/><ellipse cx="43" cy="44" rx="16" ry="12" fill="#e5fbe9"/><path d="M43 61C43 54 43 36 43 27" stroke="#80bb8a" stroke-width="3" stroke-linecap="round"/><ellipse cx="43" cy="34" rx="7" ry="16" fill="#c8ffc8" transform="rotate(-25 43 34)"/><ellipse cx="43" cy="34" rx="7" ry="16" fill="#c8ffc8" transform="rotate(25 43 34)"/></svg>`,
-      `<svg viewBox="0 0 86 86" xmlns="http://www.w3.org/2000/svg"><circle cx="43" cy="43" r="43" fill="#f4f6fb"/><ellipse cx="27" cy="25" rx="6" ry="16" fill="#eee"/><ellipse cx="59" cy="25" rx="6" ry="16" fill="#eee"/><ellipse cx="43" cy="52" rx="23" ry="15" fill="#fff"/><ellipse cx="43" cy="48" rx="16" ry="12" fill="#fff"/><ellipse cx="34" cy="47" rx="3" ry="4" fill="#222"/><ellipse cx="52" cy="47" rx="3" ry="4" fill="#222"/><ellipse cx="43" cy="56" rx="5" ry="2.5" fill="#ccc"/></svg>`,
-      `<svg viewBox="0 0 86 86" xmlns="http://www.w3.org/2000/svg"><circle cx="43" cy="43" r="43" fill="#fff0f7"/><ellipse cx="43" cy="54" rx="21" ry="13" fill="#fbb8e1"/><ellipse cx="43" cy="44" rx="13" ry="16" fill="#fff"/><ellipse cx="43" cy="36" rx="6" ry="6" fill="#ffb8e1"/><ellipse cx="43" cy="36" rx="4" ry="7" fill="#fea1e1"/><ellipse cx="37" cy="40" rx="5" ry="2.2" fill="#fea1e1" transform="rotate(-12 37 40)"/><ellipse cx="49" cy="40" rx="5" ry="2.2" fill="#fea1e1" transform="rotate(12 49 40)"/></svg>`,
-      `<svg viewBox="0 0 86 86" xmlns="http://www.w3.org/2000/svg"><circle cx="43" cy="43" r="43" fill="#e6ffe6"/><ellipse cx="43" cy="48" rx="25" ry="17" fill="#b0f7b4"/><ellipse cx="43" cy="44" rx="16" ry="12" fill="#e6ffe6"/><path d="M43 61C43 54 43 36 43 27" stroke="#80bb8a" stroke-width="3" stroke-linecap="round"/><ellipse cx="43" cy="37" rx="13" ry="18" fill="#70e97b" transform="rotate(-15 43 37)"/><ellipse cx="43" cy="37" rx="13" ry="18" fill="#70e97b" transform="rotate(15 43 37)"/></svg>`,
-      `<svg viewBox="0 0 86 86" xmlns="http://www.w3.org/2000/svg"><circle cx="43" cy="43" r="43" fill="#fff4e6"/><ellipse cx="43" cy="52" rx="23" ry="15" fill="#ffe0b2"/><ellipse cx="43" cy="48" rx="16" ry="12" fill="#fff"/><ellipse cx="34" cy="47" rx="3" ry="4" fill="#a95c00"/><ellipse cx="52" cy="47" rx="3" ry="4" fill="#a95c00"/><ellipse cx="43" cy="56" rx="5" ry="2.5" fill="#ffc48f"/><path d="M22 18l8 14M64 18l-8 14" stroke="#ffc48f" stroke-width="3" stroke-linecap="round"/></svg>`
-    ];
-    function randomAvatarSVG() {
-      return flatAvatars[Math.floor(Math.random()*flatAvatars.length)];
+    // --- Jadwal Harian ---
+    let jadwals = JSON.parse(localStorage.getItem('jadwals') || '[]');
+    function saveJadwals() {
+      localStorage.setItem('jadwals', JSON.stringify(jadwals));
     }
-    let onboardAvatar = localStorage.getItem('planner_avatar') || "";
-    let onboardName = localStorage.getItem('planner_name') || "";
-    let avatarSVG = onboardAvatar || randomAvatarSVG();
-    function setAvatarSVG(svg) {
-      document.getElementById('avatarImage').innerHTML = svg;
+    function addJadwal(jam = '', text = '') {
+      jadwals.push({ jam: jam || defJam(jadwals.length), text });
+      saveJadwals(); renderJadwal();
     }
-    setAvatarSVG(avatarSVG);
-    document.getElementById('avatarPicker').addEventListener('click', () => {
-      document.getElementById('avatarInput').click();
-    });
-    document.getElementById('avatarInput').addEventListener('change', function(e){
-      if (this.files && this.files[0]) {
-        const file = this.files[0];
-        if (!file.type.startsWith('image/')) return;
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          avatarSVG = `<img src="${evt.target.result}" alt="avatar">`;
-          setAvatarSVG(avatarSVG);
-          localStorage.setItem('planner_avatar', avatarSVG);
-          syncPlannerAvatar();
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-    document.getElementById('avatarPicker').addEventListener('keydown', function(e){
-      if(e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        document.getElementById('avatarInput').click();
-      }
-    });
-    document.getElementById('avatarPicker').addEventListener('contextmenu', function(e){
-      e.preventDefault();
-      avatarSVG = randomAvatarSVG();
-      setAvatarSVG(avatarSVG);
-      localStorage.setItem('planner_avatar', avatarSVG);
-      syncPlannerAvatar();
-    });
-    const nameInput = document.getElementById('onboardName');
-    const goBtn = document.getElementById('onboardGo');
-    nameInput.value = onboardName;
-    function checkNameInput() {
-      if (nameInput.value.trim().length > 1) {
-        goBtn.classList.add('active');
-      } else {
-        goBtn.classList.remove('active');
-      }
+    function delJadwal(idx) {
+      jadwals.splice(idx, 1);
+      saveJadwals(); renderJadwal();
     }
-    nameInput.addEventListener('input', checkNameInput);
-    checkNameInput();
-    nameInput.addEventListener('keydown', function(e){
-      if(e.key === "Enter" && goBtn.classList.contains('active')) {
-        goBtn.click();
-      }
-    });
-    goBtn.addEventListener('click', function(){
-      if (!goBtn.classList.contains('active')) return;
-      localStorage.setItem('planner_name', nameInput.value.trim());
-      if (avatarSVG.startsWith('<img')) {
-        localStorage.setItem('planner_avatar', avatarSVG);
-      } else {
-        localStorage.setItem('planner_avatar', avatarSVG);
-      }
-      updatePlannerHeader();
-      document.getElementById('onboard').style.display = 'none';
-      document.getElementById('mainApp').classList.remove('with-blur');
-      syncPlannerAvatar();
-    });
-    function getGreeting() {
-      const now = new Date();
-      let hour = now.getHours();
-      if (hour >= 4 && hour < 10) return "Pagi";
-      if (hour >= 10 && hour < 15) return "Siang";
-      if (hour >= 15 && hour < 18) return "Sore";
-      return "Malam";
-    }
-    function syncPlannerAvatar() {
-      const plannerAvatarImage = document.getElementById('plannerAvatarImage');
-      if (!plannerAvatarImage) return;
-      let av = localStorage.getItem('planner_avatar') || randomAvatarSVG();
-      plannerAvatarImage.innerHTML = av;
-    }
-    function updatePlannerHeader() {
-      document.getElementById('plannerHeader').style.display = 'flex';
-      document.getElementById('plannerTitle').style.display = 'none';
-      let av = localStorage.getItem('planner_avatar') || randomAvatarSVG();
-      document.getElementById('plannerAvatarImage').innerHTML = av;
-      let nm = localStorage.getItem('planner_name') || '';
-      let greet = getGreeting();
-      document.getElementById('plannerGreetMain').textContent = `${greet}, ${nm}`;
-      document.getElementById('plannerGreetSub').textContent = "Semoga harimu produktif!";
-    }
-    window.addEventListener('DOMContentLoaded', function(){
-      if ((localStorage.getItem('planner_name')||"").length > 1) {
-        document.getElementById('onboard').style.display = 'none';
-        document.getElementById('mainApp').classList.remove('with-blur');
-        updatePlannerHeader();
-        syncPlannerAvatar();
-      } else {
-        document.getElementById('onboard').style.display = 'flex';
-        document.getElementById('mainApp').classList.add('with-blur');
-        document.getElementById('plannerHeader').style.display = 'none';
-        document.getElementById('plannerTitle').style.display = 'none';
-      }
-    });
-    // ==========================
-    // === AVATAR HEADER UTAMA ==
-    // ==========================
-    function setHeaderAvatarEvent() {
-      const plannerAvatar = document.getElementById('plannerAvatar');
-      const plannerAvatarInput = document.getElementById('plannerAvatarInput');
-      plannerAvatar.addEventListener('click', function(e){
-        plannerAvatarInput.click();
-      });
-      plannerAvatar.addEventListener('keydown', function(e){
-        if(e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          plannerAvatarInput.click();
-        }
-      });
-      plannerAvatar.addEventListener('contextmenu', function(e){
-        e.preventDefault();
-        let avatarSVG = randomAvatarSVG();
-        localStorage.setItem('planner_avatar', avatarSVG);
-        syncPlannerAvatar();
-        setAvatarSVG(avatarSVG);
-      });
-      plannerAvatarInput.addEventListener('change', function(e){
-        if (this.files && this.files[0]) {
-          const file = this.files[0];
-          if (!file.type.startsWith('image/')) return;
-          const reader = new FileReader();
-          reader.onload = function(evt) {
-            let avatarSVG = `<img src="${evt.target.result}" alt="avatar">`;
-            localStorage.setItem('planner_avatar', avatarSVG);
-            syncPlannerAvatar();
-            setAvatarSVG(avatarSVG);
-          };
-          reader.readAsDataURL(file);
-        }
-      });
-    }
-    setTimeout(setHeaderAvatarEvent, 100);
-    // --- Planner logic tetap (jadwal, tugas, tracker) ---
-    let jadwals = JSON.parse(localStorage.getItem('jadwals_svg') || '[]');
-    function saveJadwals() { localStorage.setItem('jadwals_svg', JSON.stringify(jadwals)); }
-    function customTimePicker(val, idx) {
-      let jam = "07", menit = "00";
-      if (val && val.includes(":")) [jam, menit] = val.split(":");
-      let jamHtml = '<select onchange="updateJamCustom(this,'+idx+')" data-part="jam">';
-      for(let h=0; h<24; h++) {
-        let hh = h.toString().padStart(2,'0');
-        jamHtml += `<option value="${hh}" ${jam===hh?'selected':''}>${hh}</option>`;
-      }
-      jamHtml += '</select>';
-      let menitHtml = '<select onchange="updateJamCustom(this,'+idx+')" data-part="menit">';
-      for(let m=0; m<60; m+=5) {
-        let mm = m.toString().padStart(2,'0');
-        menitHtml += `<option value="${mm}" ${menit===mm?'selected':''}>${mm}</option>`;
-      }
-      menitHtml += '</select>';
-      return `<div class="custom-timepicker">${jamHtml}<span class="separator">:</span>${menitHtml}</div>`;
-    }
-    function updateJamCustom(el, idx) {
-      let parent = el.closest('.custom-timepicker');
-      let jam = parent.querySelector('select[data-part="jam"]').value;
-      let menit = parent.querySelector('select[data-part="menit"]').value;
-      jadwals[idx].jam = jam+":"+menit;
-      saveJadwals();
-    }
-    function alarmIcon(isActive, isRinging = false) {
-      if (isRinging) return `<span class="alarm-icon alarm-ringing" title="Alarm berbunyi!">${alarmSVG('ringing')}</span>`;
-      if (isActive) return `<span class="alarm-icon alarm-on" title="Alarm aktif">${alarmSVG('on')}</span>`;
-      return `<span class="alarm-icon alarm-off" title="Alarm nonaktif">${alarmSVG('off')}</span>`;
-    }
-    function alarmSVG(state) {
-      if (state === 'on') return `
-      <svg width="22" height="22" stroke="#43E97B" fill="none" stroke-width="2" viewBox="0 0 24 24">
-        <circle cx="12" cy="13" r="7"/>
-        <path d="M12 13V9M12 13L15 15"/>
-        <path d="M5 3L2 6"/>
-        <path d="M19 3l3 3"/>
-      </svg>`;
-      if (state === 'ringing') return `
-      <svg width="22" height="22" stroke="#FF6363" fill="none" stroke-width="2" viewBox="0 0 24 24">
-        <circle cx="12" cy="13" r="7"/>
-        <path d="M12 13V9M12 13L15 15"/>
-        <path d="M5 3L2 6"/>
-        <path d="M19 3l3 3"/>
-        <g><path d="M2 21L22 21" stroke="#FF6363" stroke-width="1.5"/></g>
-      </svg>`;
-      return `
-      <svg width="22" height="22" stroke="#bbb" fill="none" stroke-width="2" viewBox="0 0 24 24">
-        <circle cx="12" cy="13" r="7"/>
-        <path d="M12 13V9M12 13L15 15"/>
-        <path d="M5 3L2 6"/>
-        <path d="M19 3l3 3"/>
-        <g class="slash"><line x1="5" y1="20" x2="19" y2="6" stroke="#bbb" stroke-width="2"/></g>
-      </svg>`;
-    }
-    function toggleAlarm(idx) {
-      jadwals[idx].alarm = !jadwals[idx].alarm;
-      saveJadwals();
-      renderJadwal();
-    }
-    function svgPlus(color = "#fff") {
-      return `<svg width="20" height="20" fill="none" stroke="${color}" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`;
-    }
-    function svgMinus(color = "#fff") {
-      return `<svg width="20" height="20" fill="none" stroke="${color}" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></svg>`;
-    }
-    function svgTrash(color="#bbb") {
-      return `<svg width="20" height="20" fill="none" stroke="${color}" stroke-width="2" viewBox="0 0 24 24">
-        <rect x="5" y="6" width="14" height="13" rx="2"/>
-        <path d="M3 6h18"/>
-        <path d="M8 10v6"/>
-        <path d="M12 10v6"/>
-        <path d="M16 10v6"/>
-        <path d="M10 3h4"/>
-      </svg>`;
-    }
-    function addSubJadwal(idx) {
-      jadwals[idx].subs = jadwals[idx].subs || [];
-      jadwals[idx].subs.push({ text: "" });
-      saveJadwals();
-      renderJadwal();
-      setTimeout(() => {
-        const input = document.querySelector(`.sub-task-row[data-parent="${idx}"] input[type="text"]:last-child`);
-        if (input) input.focus();
-      }, 50);
-    }
-    function delSubJadwal(idx, sidx) {
-      jadwals[idx].subs.splice(sidx, 1);
-      saveJadwals();
-      renderJadwal();
-    }
-    function getSubGrad(si) {
-      const gradients = [
-        'linear-gradient(90deg, #f3fefd 0%, #f7e6ff 100%)',
-        'linear-gradient(90deg, #f7f7fa 0%, #e7f8fa 100%)',
-        'linear-gradient(90deg, #fdf7fa 0%, #e8f8fd 100%)',
-        'linear-gradient(90deg, #f3fafd 0%, #f9fbe7 100%)',
-        'linear-gradient(90deg, #e7f8fa 0%, #f7f7fa 100%)',
-        'linear-gradient(90deg, #f9fbe7 0%, #f3fafd 100%)',
-        'linear-gradient(90deg, #f7e6ff 0%, #f3fefd 100%)'
-      ];
-      return gradients[si % gradients.length];
-    }
-    function clearOnFocus(el) { el.dataset.oldph = el.placeholder; el.placeholder = ''; el.select && el.select(); }
-    function restoreOnBlur(el) { if (!el.value) el.placeholder = el.dataset.oldph || ''; }
-    function handleEnter(e, idx, isSub, sidx) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        setTimeout(() => {
-          if (document.activeElement === e.target) e.target.blur();
-        }, 50);
-      }
+    function defJam(idx) {
+      const def = ["06:00","09:00","12:00","15:00","18:00"];
+      return def[idx] || "";
     }
     function renderJadwal() {
       let html = '';
       jadwals.forEach((item, i) => {
-        html += `<div class="jadwal-row" data-idx="${i}" data-jam="${item.jam || ''}">
-          <span onclick="toggleAlarm(${i})" style="margin-right:7px;">
-            ${alarmIcon(!!item.alarm)}
-          </span>
-          ${customTimePicker(item.jam, i)}
-          <input type="text" maxlength="30" 
-            placeholder="${item.text ? '' : 'Aktivitas...'}" 
-            value="${item.text || ''}"
-            onfocus="clearOnFocus(this)" onblur="restoreOnBlur(this)"
-            onkeydown="handleEnter(event,${i},false)"
-            onchange="jadwals[${i}].text=this.value;saveJadwals();"
-            />
+        html += `<div class="jadwal-row">
+          <input type="text" class="jam" maxlength="5" value="${item.jam}" onchange="jadwals[${i}].jam=this.value;saveJadwals();renderJadwal()">
+          <input type="text" maxlength="30" placeholder="Aktivitas..." value="${item.text}" onchange="jadwals[${i}].text=this.value;saveJadwals();">
           <div class="actions">
-            <button class="btn add" title="Tambah sub-jadwal" onclick="addSubJadwal(${i})">${svgPlus("#36b9cc")}</button>
-            <button class="btn" title="Hapus" onclick="jadwals.splice(${i},1);saveJadwals();renderJadwal()">${svgTrash()}</button>
+            <button class="btn add" title="Tambah" onclick="jadwals.splice(${i}+1,0,{jam:'',text:''});saveJadwals();renderJadwal()">＋</button>
+            <button class="btn" title="Hapus" onclick="delJadwal(${i})">🗑️</button>
           </div>
         </div>`;
-        if (item.subs && item.subs.length > 0) {
-          item.subs.forEach((sub, si) => {
-            let grad = getSubGrad(si);
-            html += `<div class="sub-task-row" style="background:${grad};" data-parent="${i}">
-              <input type="text" maxlength="25" placeholder="Sub aktivitas..." value="${sub.text || ''}"
-                onfocus="clearOnFocus(this)" onblur="restoreOnBlur(this)"
-                onkeydown="handleEnter(event,${i},true,${si})"
-                onchange="jadwals[${i}].subs[${si}].text=this.value;saveJadwals();"
-                />
-              <button class="btn" title="Hapus sub-jadwal" onclick="delSubJadwal(${i},${si})">${svgTrash("#bbb")}</button>
-            </div>`;
-          });
-        }
       });
       document.getElementById('jadwalList').innerHTML = html || '<div style="color:#aaa;margin:1rem 0">Belum ada jadwal. Tambahkan dengan tombol di bawah.</div>';
     }
-    function addJadwalUI() {
-      const now = new Date();
-      let jam = now.getHours().toString().padStart(2,'0') + ':' + (now.getMinutes()<30?'00':'30');
-      jadwals.push({ jam, text: "", alarm: false, subs: [] });
-      saveJadwals();
-      renderJadwal();
-      setTimeout(() => {
-        const el = document.querySelector('.jadwal-row:last-child input[type="text"]');
-        if (el) el.focus();
-      }, 50);
-    }
-    let tasks = JSON.parse(localStorage.getItem('tasks_svg') || '[]');
+
+    // --- Daftar Tugas ---
+    let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
     function saveTasks() {
-      localStorage.setItem('tasks_svg', JSON.stringify(tasks));
+      localStorage.setItem('tasks', JSON.stringify(tasks));
       renderStats();
     }
     function addTask(text = '') {
@@ -1023,37 +439,33 @@
     function renderTasks() {
       let html = '';
       tasks.forEach((item, i) => {
-        let checkbox = `<input type="checkbox" ${item.done ? 'checked' : ''} ${!item.text ? 'disabled' : ''} onclick="if(this.disabled)return;tasks[${i}].done=this.checked;saveTasks();renderTasks()">`;
         html += `<div class="task-row${item.done ? ' done' : ''}">
-          ${checkbox}
-          <input type="text" maxlength="40" placeholder="Tugas..." value="${item.text}" 
-            onfocus="clearOnFocus(this)" onblur="restoreOnBlur(this)"
-            onkeydown="if(event.key==='Enter'){event.target.blur();}"
-            onchange="tasks[${i}].text=this.value;saveTasks();renderTasks();">
+          <input type="checkbox" ${item.done ? 'checked':''} onclick="tasks[${i}].done=this.checked;saveTasks();renderTasks()">
+          <input type="text" maxlength="40" placeholder="Tugas..." value="${item.text}" onchange="tasks[${i}].text=this.value;saveTasks();">
           <div class="actions">
-            <button class="btn add" title="Tambah" onclick="tasks.splice(${i}+1,0,{text:'',done:false});saveTasks();renderTasks()">
-            ${svgPlus("#36b9cc")}
-            </button>
-            <button class="btn" title="Hapus" onclick="delTask(${i})">
-            ${svgTrash()}
-            </button>
+            <button class="btn add" title="Tambah" onclick="tasks.splice(${i}+1,0,{text:'',done:false});saveTasks();renderTasks()">＋</button>
+            <button class="btn" title="Hapus" onclick="delTask(${i})">🗑️</button>
           </div>
         </div>`;
       });
       document.getElementById('taskList').innerHTML = html || '<div style="color:#aaa;margin:1rem 0">Belum ada tugas. Tambahkan dengan tombol di bawah.</div>';
       renderStats();
     }
+
+    // --- Statistik Atas ---
     function renderStats() {
       const total = tasks.length;
-      const done = tasks.filter(t=>t.done && t.text).length;
-      const pending = tasks.filter(t=>t.text).length - done;
-      document.getElementById('totalTasks').textContent = tasks.filter(t=>t.text).length;
+      const done = tasks.filter(t=>t.done).length;
+      const pending = total - done;
+      document.getElementById('totalTasks').textContent = total;
       document.getElementById('doneTasks').textContent = done;
       document.getElementById('pendingTasks').textContent = pending;
     }
-    let trackers = JSON.parse(localStorage.getItem('trackers_svg') || '[]');
+
+    // --- Tracker Harian ---
+    let trackers = JSON.parse(localStorage.getItem('trackers') || '[]');
     function saveTrackers() {
-      localStorage.setItem('trackers_svg', JSON.stringify(trackers));
+      localStorage.setItem('trackers', JSON.stringify(trackers));
     }
     function addTracker(name = '', target = 1, val = 0) {
       trackers.push({ name, target, val });
@@ -1066,53 +478,56 @@
     function renderTrackers() {
       let html = '';
       trackers.forEach((tr, i) => {
-        let showProgress = tr.name && tr.name.trim() !== "";
-        let percent = (showProgress && tr.target>0) ? Math.min(100,Math.round(tr.val/tr.target*100)) : 0;
+        let percent = tr.target>0 ? Math.min(100,Math.round(tr.val/tr.target*100)) : 0;
         html += `<div class="tracker-row">
           <div class="header">
-            <input type="text" maxlength="20" placeholder="Nama tracker..." value="${tr.name}" onchange="trackers[${i}].name=this.value;saveTrackers();renderTrackers();">
-            <input type="number" min="1" max="99" value="${tr.target}" ${!showProgress ? "disabled" : ""} onchange="trackers[${i}].target=+this.value;saveTrackers();renderTrackers()" title="Target">
+            <input type="text" maxlength="20" placeholder="Nama tracker..." value="${tr.name}" onchange="trackers[${i}].name=this.value;saveTrackers();">
+            <input type="number" min="1" max="99" value="${tr.target}" onchange="trackers[${i}].target=+this.value;saveTrackers();renderTrackers()" title="Target">
             <span style="color:var(--muted);font-size:.98rem;">Target</span>
-            <button class="btn" title="Hapus" onclick="delTracker(${i})">
-            ${svgTrash()}
-            </button>
+            <button class="btn" title="Hapus" onclick="delTracker(${i})">🗑️</button>
           </div>
           <div class="tracker-controls">
-            <button onclick="trackers[${i}].val=Math.max(0,trackers[${i}].val-1);saveTrackers();renderTrackers()" ${!showProgress ? "disabled" : ""}>
-            ${svgMinus()}
-            </button>
+            <button onclick="trackers[${i}].val=Math.max(0,trackers[${i}].val-1);saveTrackers();renderTrackers()">−</button>
             <span style="min-width:32px;text-align:center;font-weight:600;">${tr.val}</span>
-            <button onclick="trackers[${i}].val=Math.min(trackers[${i}].target,trackers[${i}].val+1);saveTrackers();renderTrackers()" ${!showProgress ? "disabled" : ""}>
-            ${svgPlus()}
-            </button>
+            <button onclick="trackers[${i}].val=Math.min(trackers[${i}].target,trackers[${i}].val+1);saveTrackers();renderTrackers()">＋</button>
           </div>
-          ${showProgress ? `<div class="progress-bar"><div class="progress-bar-inner" style="width:${percent}%"></div></div>
-          <div class="progress-bar-label">${percent}% tercapai</div>` : ""}
+          <div class="progress-bar"><div class="progress-bar-inner" style="width:${percent}%"></div></div>
+          <div class="progress-bar-label">${percent}% tercapai</div>
         </div>`;
       });
       document.getElementById('trackerList').innerHTML = html || '<div style="color:#aaa;margin:1rem 0">Belum ada tracker. Tambahkan dengan tombol di bawah.</div>';
     }
-    if (!jadwals.length) {
-      jadwals = [ {jam:"06:00", text:"Morning routine...", alarm: false, subs:[]} ];
+
+    // --- INIT ---
+    if (jadwals.length === 0) {
+      jadwals = [
+        {jam:"06:00", text:"Morning routine..."},
+        {jam:"09:00", text:"Mulai kerja..."},
+        {jam:"12:00", text:"Istirahat makan siang..."},
+        {jam:"15:00", text:"Aktivitas sore..."},
+        {jam:"18:00", text:"Waktu santai..."}
+      ];
       saveJadwals();
     }
     renderJadwal();
-    if (tasks.length === 0) { tasks = []; saveTasks(); }
     renderTasks();
     renderTrackers();
     renderStats();
-    window.toggleAlarm = toggleAlarm;
-    window.addSubJadwal = addSubJadwal;
-    window.delSubJadwal = delSubJadwal;
-    window.updateJamCustom = updateJamCustom;
-    window.addJadwalUI = addJadwalUI;
+    // Expose functions for inline HTML usage
+    window.addJadwal = addJadwal;
+    window.delJadwal = delJadwal;
     window.addTask = addTask;
     window.delTask = delTask;
     window.addTracker = addTracker;
     window.delTracker = delTracker;
-    window.clearOnFocus = clearOnFocus;
-    window.restoreOnBlur = restoreOnBlur;
-    window.handleEnter = handleEnter;
+  </script>
+  <script>
+    // Service Worker untuk PWA
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function() {
+        navigator.serviceWorker.register("service-worker.js");
+      });
+    }
   </script>
 </body>
 </html>
