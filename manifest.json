@@ -1,49 +1,22 @@
 {
-  "id": "/dailyplanner/",
   "name": "Planner",
   "short_name": "Planner",
-  "start_url": ".",
+  "description": "A simple daily planner app.",
+  "start_url": "/dailyplanner/",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#36b9cc",
   "theme_color": "#36b9cc",
-  "description": "Aplikasi Daily Planner modern untuk jadwal, tugas, dan tracker harian.",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "icon-192.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
+      "type": "image/png"
     },
     {
       "src": "icon-512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    }
-  ],
-  "scope": "/dailyplanner/",
-  "dir": "ltr",
-  "lang": "id",
-  "categories": ["productivity", "planner"],
-  "screenshots": [
-    {
-      "src": "screenshot1.png",
-      "sizes": "800x600",
       "type": "image/png"
     }
-  ],
-  "prefer_related_applications": false,
-  "launch_handler": {
-    "client_mode": "auto"
-  },
-  "orientation": "portrait",
-  "iarc_rating_id": "PWA-000000-000000",  // <--- isi string dummy agar warning hilang
-  "related_applications": [
-    {
-      "platform": "play",
-      "url": "https://play.google.com/store/apps/details?id=com.example.app",
-      "id": "com.example.app"
-    }
-  ],
-  "scope_extensions": []
+  ]
 }
