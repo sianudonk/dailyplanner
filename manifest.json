@@ -19,15 +19,16 @@
       "type": "image/png"
     }
   ],
-  "orientation": "portrait",
-  "launch_handler": {
-    "client_mode": "auto"
-  },
+  "scope": "/dailyplanner/",
+  "dir": "ltr",
+  "lang": "id",
+  "categories": ["productivity", "planner"],
   "screenshots": [
     {
       "src": "screenshot1.png",
       "sizes": "800x600",
       "type": "image/png"
     }
-  ]
+  ],
+  "prefer_related_applications": false
 }
