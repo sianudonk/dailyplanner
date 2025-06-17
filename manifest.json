@@ -1,11 +1,12 @@
 {
-  "name": "Daily Planner",
+  "id": "/dailyplanner/",
+  "name": "Planner",
   "short_name": "Planner",
-  "description": "Aplikasi Daily Planner modern untuk jadwal, tugas, dan tracker harian.",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#f7f9fd",
+  "background_color": "#ffffff",
   "theme_color": "#36b9cc",
+  "description": "Aplikasi Daily Planner modern untuk jadwal, tugas, dan tracker harian.",
   "icons": [
     {
       "src": "icon-192.png",
@@ -15,6 +16,17 @@
     {
       "src": "icon-512.png",
       "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "orientation": "portrait",
+  "launch_handler": {
+    "client_mode": "auto"
+  },
+  "screenshots": [
+    {
+      "src": "screenshot1.png",
+      "sizes": "800x600",
       "type": "image/png"
     }
   ]
