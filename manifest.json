@@ -37,7 +37,7 @@
     "client_mode": "auto"
   },
   "orientation": "portrait",
-  "iarc_rating_id": "",
+  "iarc_rating_id": "PWA-000000-000000",  // <--- isi string dummy agar warning hilang
   "related_applications": [
     {
       "platform": "play",
