@@ -1,10 +1,10 @@
 const CACHE_NAME = "dailyplanner-cache-v1";
 const urlsToCache = [
-  "./",
-  "./index.html",
-  "./manifest.json",
-  "./icon-192.png",
-  "./icon-512.png"
+  "/dailyplanner/",
+  "/dailyplanner/index.html",
+  "/dailyplanner/manifest.json",
+  "/dailyplanner/icon-192.png",
+  "/dailyplanner/icon-512.png"
   // Tambahkan file CSS/JS lain jika ada
 ];
 
